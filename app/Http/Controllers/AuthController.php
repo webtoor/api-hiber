@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\User;
+use Illuminate\Support\Facades\Hash;
+
 class AuthController extends Controller
 {
 
@@ -17,6 +20,17 @@ class AuthController extends Controller
             'firstname'=> 'required|string',
             'lastname' => 'required|string',
         ]);
-      return response()->json($request->all());
+
+        User::create([
+            'username' => $request->json('username'),
+            'email' => $request->json('email'),
+            'password' => Hash::make($request->json('password')),
+            'firstname' => $request->json('firstname'),
+            'lastname' => $request->json('lastname')
+        ]);
+        return response()->json([
+            'succes' => true,
+            'message' => 'Berhasil membuat akun!'
+        ], 201);
     }
 }
