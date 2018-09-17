@@ -11,9 +11,16 @@
 |
 */
 
-/* $factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
+        'username' => $faker->firstname,
+        'password' => \Illuminate\Support\Facades\Hash::make('rahasia'),
         'email' => $faker->email,
+        'firstname' => $faker->firstname,
+        'lastname' => $faker->lastname,
+        'address' => $faker->address,
+        'mobilephone' => $faker->phoneNumber,
+        'post_code' => $faker->postcode
+
     ];
-}); */
+});

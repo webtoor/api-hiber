@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateRfUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('rf_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('firstName', '100')->nullable();
-            $table->string('lastName', '100')->nullable();
+            $table->string('username', '100')->nullable();
             $table->string('email')->unique();
             $table->string('password')->nullable();
-            $table->string('city', '100')->nullable();
-            $table->integer('status')->nullable();
+            $table->string('firstname', '100')->nullable();
+            $table->string('lastname', '100')->nullable();
+            $table->string('address', '100')->nullable();
+            $table->string('mobilephone', '100')->nullable();
+            $table->string('post_code')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -33,6 +34,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('rf_users');
     }
 }

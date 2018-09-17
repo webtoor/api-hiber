@@ -48,6 +48,8 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->configure('auth');
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -78,12 +80,17 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+ $app->register(App\Providers\AppServiceProvider::class);
+ $app->register(App\Providers\AuthServiceProvider::class);
+ $app->register(App\Providers\EventServiceProvider::class);
 // Finally register two service providers - original one and Lumen adapter
 $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
+Dusterio\LumenPassport\LumenPassport::routes($app);
+
+// Lumen Generator
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

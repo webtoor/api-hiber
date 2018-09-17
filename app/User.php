@@ -4,14 +4,17 @@ namespace App;
 
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
+
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use Authenticatable, Authorizable, SoftDeletes;
+    use HasApiTokens, Authenticatable, Authorizable;
+
+    protected $table = 'rf_users';
 
     /**
      * The attributes that are mass assignable.
@@ -19,22 +22,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'uid',
-        'firstName',
-        'lastName',
-        'middleName',
+        'username',
         'email',
         'password',
-        'address',
-        'zipCode',
-        'username',
-        'city',
-        'state',
-        'country',
-        'phone',
-        'mobile',
-        'type',
-        'isActive'
+        'firstname',
+        'lastname',
+        'mobilephone',
+        'post_code'
     ];
 
     /**
