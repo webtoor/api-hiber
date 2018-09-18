@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9821587ede892bca7c28b4b4090c7aa8",
+    "content-hash": "cb2134866a2161c21b2aa64fa968e5fd",
     "packages": [
         {
             "name": "classpreloader/classpreloader",

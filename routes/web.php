@@ -11,16 +11,17 @@
 |
 */
 
-/* $router->get('/', function () use ($router) {
+$router->get('/', function () use ($router) {
     return $router->app->version();
-}); */
+}); 
 /* $router->group(['prefix' => '/'], function () use ($router) {
     $router->post('login', ['uses' => 'UserController@login']);
     $router->get('logins', ['uses' => 'UserController@logins']);
   }); */
 
-$router->post('login', ['uses' => 'LoginController@login']);
+$router->post('login', ['uses' => 'AuthController@login']);
 $router->post('register', ['uses' => 'AuthController@register']);
+$router->get('test', ['uses' => 'AuthController@test']);
 
 $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
     $router->get('show', ['uses' => 'UserController@show']);
