@@ -43,8 +43,17 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $e
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Exception $exception)
     {
-        return parent::render($request, $e);
+       
+        if($request->expectsJson()){
+            if($exception instanceof ValidationException){
+                return response()->json([
+                    'message' => $exception->getMessage(),
+                    'error' => $exception->validator->errors()
+                ],422);
+            }
+        }
+        return parent::render($request, $exception); 
     }
 }

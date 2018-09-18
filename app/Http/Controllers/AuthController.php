@@ -82,8 +82,11 @@ class AuthController extends Controller
             ]
     
         );
-        return $app->dispatch($proxy);
-
-
+        $response = $app->dispatch($proxy);
+         //dd($result);
+         $json = (array) json_decode($response->getContent());
+         $json['new_value'] = '123456';
+         $response->setContent(json_encode($json));
+         return $response;
     }
 }
