@@ -14,9 +14,6 @@ use GuzzleHttp\Client;
 class AuthController extends Controller
 {
     
-
-  
-
     public function register(Request $request){
         /* $result = $request->json()->all(); */
         $this->validate($request, [
@@ -25,15 +22,23 @@ class AuthController extends Controller
             'password' => 'required|string|min:5|confirmed',
             'firstname'=> 'required|string',
             'lastname' => 'required|string',
+            'registerType' => 'required|string'
         ]);
 
-        User::create([
+        $resultUser = User::create([
             'username' => $request->json('username'),
             'email' => $request->json('email'),
             'password' => Hash::make($request->json('password')),
             'firstname' => $request->json('firstname'),
             'lastname' => $request->json('lastname')
         ]);
+
+        $resultRole = User_role::create([
+            'user_id' => $resultUser->id,
+            'rf_role_id' => $request->json('register_type')
+        ]);
+
+
         return response()->json([
             'succes' => true,
             'message' => 'Berhasil membuat akun!'
