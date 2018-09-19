@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
 /* use GuzzleHttp\Client; */
 use App\User;
 use App\User_role;
@@ -85,7 +87,7 @@ class AuthController extends Controller
                 'grant_type'=>'password',
                 'client_id'=>'1',
                 'client_secret'=>'R1lAPTRrfvY102gLzVC1TU2hCq2gqfOUosNah4Mj',
-                'username'=>'vaughn53@hotmail.com',
+                'username'=>'toor@email.com',
                 'password'=>'rahasia',
                 'scope' => '*'
             ]
@@ -97,5 +99,20 @@ class AuthController extends Controller
          $json['new_value'] = '123456';
          $response->setContent(json_encode($json));
          return $response;
+    }
+
+    public function logout(){
+       $accessToken = Auth::user()->token();
+            DB::table('oauth_refresh_tokens')
+                ->where('access_token_id', $accessToken->id)
+                ->update([
+                    'revoked' => '1'
+                ]);
+                
+            DB::table('oauth_refresh_tokens')
+            ->where('access_token_id', $accessToken->id)
+            ->delete();
+        $accessToken->revoke();
+        $accessToken->delete();
     }
 }

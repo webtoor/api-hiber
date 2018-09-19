@@ -25,4 +25,5 @@ $router->get('test', ['uses' => 'AuthController@test']);
 
 $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
     $router->get('show', ['uses' => 'UserController@show']);
+    $router->get('logout', ['uses' => 'AuthController@logout']);
   });
