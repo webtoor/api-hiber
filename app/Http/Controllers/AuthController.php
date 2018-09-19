@@ -52,67 +52,55 @@ class AuthController extends Controller
     }
 
     public function login (Request $request){
-        /* $this->validate($request,[
+
+         $this->validate($request,[
             'email' => 'required',
             'password' => 'required'
-        ]); */
-            
-      /*   $client = new Client();
-        $response = $client->get('http://localhost:8000/test', 
-        [ 'proxy'   => 'tcp://localhost:80',
-      
-            
-        ]);
-        echo $response->getStatusCode(); 
-                
-        $http = new GuzzleHttp\Client;
+        ]);    
 
-        $response = $http->post('http://localhost:8000/oauth/token', [
-            'form_params' => [
-                'grant_type' => 'password',
-                'client_id' => 'client-id',
-                'client_secret' => 'client-secret',
-                'username' => 'taylor@laravel.com',
-                'password' => 'my-password',
-                'scope' => '',
-            ],
-        ]);
-
-        return json_decode((string) $response->getBody(), true);*/
         global $app; 
-        $proxy = Request::create(
-            '/oauth/token',
-            'post',
-            [
-                'grant_type'=>'password',
-                'client_id'=>'1',
-                'client_secret'=>'R1lAPTRrfvY102gLzVC1TU2hCq2gqfOUosNah4Mj',
-                'username'=>'toor@email.com',
-                'password'=>'rahasia',
-                'scope' => '*'
-            ]
-    
-        );
+
+        $email = $request->json('email');
+        $password = $request->json('password');
+
+        $params = [
+            'grant_type'=>'password',
+            'client_id' =>'1',
+            'client_secret'=>'R1lAPTRrfvY102gLzVC1TU2hCq2gqfOUosNah4Mj',
+            'username'  => $email,
+            'password'  => $password,
+            'scope'     => ''
+        ];
+        
+        $proxy = Request::create('/oauth/token','post', $params);
         $response = $app->dispatch($proxy);
-         //dd($result);
-         $json = (array) json_decode($response->getContent());
-         $json['new_value'] = '123456';
-         $response->setContent(json_encode($json));
-         return $response;
+        $json = (array) json_decode($response->getContent());
+        $resultUser = User::where('email', $email)->first();
+            if(!$resultUser){
+                // Email not exist 
+                return $response;
+            }
+            if(Hash::check($password, $resultUser->password) ) {
+                // Email && Password exist
+                $json['email'] = $resultUser->email;
+                return $response->setContent(json_encode($json)); 
+
+            }else{
+                //Email exist, Password not exist
+                return $response;
+            } 
     }
 
     public function logout(){
        $accessToken = Auth::user()->token();
             DB::table('oauth_refresh_tokens')
                 ->where('access_token_id', $accessToken->id)
-                ->update([
-                    'revoked' => '1'
-                ]);
+                ->update(['revoked' => true]);
                 
             DB::table('oauth_refresh_tokens')
-            ->where('access_token_id', $accessToken->id)
-            ->delete();
-        $accessToken->revoke();
-        $accessToken->delete();
+                ->where('access_token_id', $accessToken->id)
+                ->delete();
+                $accessToken->revoke();
+                $accessToken->delete();
     }
 }
