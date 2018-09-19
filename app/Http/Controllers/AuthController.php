@@ -4,18 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-global $app;
-use App\User;
 use Illuminate\Support\Facades\Hash;
-use GuzzleHttp\Client;
-
+/* use GuzzleHttp\Client; */
+use App\User;
+use App\User_role;
 
 class AuthController extends Controller
 {
-    
     public function register(Request $request){
         /* $result = $request->json()->all(); */
+            // Validasi
         $this->validate($request, [
             'username' => 'required|string',
             'email'    => 'required|email|unique:rf_users',
@@ -24,7 +22,7 @@ class AuthController extends Controller
             'lastname' => 'required|string',
             'registerType' => 'required|string'
         ]);
-
+            // Create User
         $resultUser = User::create([
             'username' => $request->json('username'),
             'email' => $request->json('email'),
@@ -32,17 +30,23 @@ class AuthController extends Controller
             'firstname' => $request->json('firstname'),
             'lastname' => $request->json('lastname')
         ]);
-
+            // Create User role 
         $resultRole = User_role::create([
             'user_id' => $resultUser->id,
-            'rf_role_id' => $request->json('register_type')
+            'rf_role_id' => $request->json('registerType')
         ]);
-
-
-        return response()->json([
-            'succes' => true,
-            'message' => 'Berhasil membuat akun!'
-        ], 201);
+        if($resultUser && $resultRole){
+            return response()->json([
+                'succes' => true,
+                'message' => 'Berhasil membuat akun!'
+            ], 201);
+        }else{
+            return response()->json([
+                'succes' => false,
+                'message' => 'Gagal membuat akun!'
+            ], 400);
+        }
+     
     }
 
     public function login (Request $request){
