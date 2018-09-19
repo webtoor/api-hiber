@@ -14,18 +14,15 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 }); 
-/* $router->group(['prefix' => '/'], function () use ($router) {
-    $router->post('login', ['uses' => 'UserController@login']);
-    $router->get('logins', ['uses' => 'UserController@logins']);
-  }); */
+
 
 $router->post('login', ['uses' => 'AuthController@login']);
 $router->post('register', ['uses' => 'AuthController@register']);
 
 $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
+    $router->get('logout', ['uses' => 'AuthController@logout']);
+
     $router->group(['prefix' => 'user'], function () use ($router) {
         $router->get('show', ['uses' => 'UserController@show']);
       });
-    $router->get('show', ['uses' => 'UserController@show']);
-    $router->get('logout', ['uses' => 'AuthController@logout']);
   });
