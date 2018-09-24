@@ -20,17 +20,11 @@ class AuthController extends Controller
        $this->validate($request, [
             'username' => 'required|string',
             'email'    => 'required|email|unique:rf_users',
-            'phonenumber' => 'required|numeric|min:9',
+            'phonenumber' => 'required|numeric|min:10',
             'password' => 'required|string|min:5|confirmed',
             'registerType' => 'required|string'
         ]);
 
-      /*   if ($validator->fails()) {
-    
-            //pass validator errors as errors object for ajax response
-        
-                  return response()->json(['errors'=>$validator->errors()]);
-                } */
             // Create User
         $resultUser = User::create([
             'username' => $request->json('username'),
