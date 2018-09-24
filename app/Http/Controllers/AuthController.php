@@ -69,7 +69,7 @@ class AuthController extends Controller
             'client_secret'=>'R1lAPTRrfvY102gLzVC1TU2hCq2gqfOUosNah4Mj',
             'username'  => $email,
             'password'  => $password,
-            'scope'     => ''
+            'scope'     => '*'
         ];
         
         $proxy = Request::create('/oauth/token','post', $params);
