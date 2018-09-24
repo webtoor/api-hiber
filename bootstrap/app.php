@@ -50,6 +50,9 @@ $app->singleton(
 
 $app->configure('auth');
 
+$app->configure('cors');
+
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -64,10 +67,13 @@ $app->configure('auth');
 // $app->middleware([
 //    App\Http\Middleware\ExampleMiddleware::class
 // ]);
+$app->middleware([
+    \Barryvdh\Cors\HandleCors::class,
+]);
 
  $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
-]);
+     ]);
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +96,9 @@ Dusterio\LumenPassport\LumenPassport::routes($app);
 
 // Lumen Generator
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
+// CORS
+$app->register(Barryvdh\Cors\ServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
