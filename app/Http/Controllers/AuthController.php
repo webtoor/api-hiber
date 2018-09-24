@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 /* use GuzzleHttp\Client; */
 use App\User;
@@ -16,21 +17,26 @@ class AuthController extends Controller
     public function register(Request $request){
         /* $result = $request->json()->all(); */
             // Validasi
-        $this->validate($request, [
+       $this->validate($request, [
             'username' => 'required|string',
             'email'    => 'required|email|unique:rf_users',
+            'phonenumber' => 'required|numeric|min:9',
             'password' => 'required|string|min:5|confirmed',
-            'firstname'=> 'required|string',
-            'lastname' => 'required|string',
             'registerType' => 'required|string'
         ]);
+
+      /*   if ($validator->fails()) {
+    
+            //pass validator errors as errors object for ajax response
+        
+                  return response()->json(['errors'=>$validator->errors()]);
+                } */
             // Create User
         $resultUser = User::create([
             'username' => $request->json('username'),
             'email' => $request->json('email'),
+            'phonenumber' => $request->json('phonenumber'),
             'password' => Hash::make($request->json('password')),
-            'firstname' => $request->json('firstname'),
-            'lastname' => $request->json('lastname')
         ]);
             // Create User role 
         $resultRole = User_role::create([
@@ -39,12 +45,12 @@ class AuthController extends Controller
         ]);
         if($resultUser && $resultRole){
             return response()->json([
-                'succes' => true,
+                'success' => true,
                 'message' => 'Berhasil membuat akun!'
             ], 201);
         }else{
             return response()->json([
-                'succes' => false,
+                'success' => false,
                 'message' => 'Gagal membuat akun!'
             ], 400);
         }
