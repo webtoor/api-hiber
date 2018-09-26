@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRfProjecttypesTable extends Migration
+class CreateRfOutputsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRfProjecttypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rf_projecttypes', function (Blueprint $table) {
+        Schema::create('rf_outputs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
         });
@@ -26,6 +26,6 @@ class CreateRfProjecttypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rf_projecttypes');
+        Schema::dropIfExists('rf_outputs');
     }
 }

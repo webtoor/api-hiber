@@ -82,6 +82,7 @@ class AuthController extends Controller
             }
             if(Hash::check($password, $resultUser->password) ) {
                 // Email && Password exist
+                $json['id'] = $resultUser->id;
                 $json['email'] = $resultUser->email;
                 return $response->setContent(json_encode($json)); 
 
