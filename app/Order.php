@@ -10,5 +10,5 @@ class Order extends Model
     protected $fillable = [
         'subject', 'createdby', 'dtprojectstart', 'dtprojectend','projecttype', 'orderhourduration', 'comment'
     ];
-    public $timestamps = false;
+    //public $timestamps = false;
 }
