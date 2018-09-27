@@ -13,7 +13,18 @@ class OrderController extends Controller
         
         //return response()->json($request);
         $hasil_array = $request->json('hasil');
-      
+        // Generate polygon
+        $latlng_array = $request->json('latlng');
+        $odd = array();
+        $even = array();
+        foreach ($latlng_array as $key => $value) {
+            if ($key % 2 == 0) {
+                $even[] = $value;
+            }
+            else {
+                $odd[] = $value;
+            }
+        }
         $this->validate($request, [
          'mulai' => 'required|string',
          'akhir' => 'required|string',
@@ -44,6 +55,15 @@ class OrderController extends Controller
                 'output_id' => $hasil
              ]);
         }
+        
+        $count = count($even);
+            for ($i = 0; $i < $count ; $i++) {
+                $result_order_polygon = Order_location::create([
+                    'latitude' => $odd[$i],
+                    'longitude' => $even[$i]
+                ]);
+        }
+
         if($result_order && $result_order_output){
             return response()->json([
                 'success' => true
