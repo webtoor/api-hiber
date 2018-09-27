@@ -6,12 +6,19 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Order;
 use App\Order_output;
+use App\Order_location;
 
 class OrderController extends Controller
 {
     public function create(Request $request){
         
-        //return response()->json($request);
+         // Validate
+         $this->validate($request, [
+            'mulai' => 'required|string',
+            'akhir' => 'required|string',
+            'kegunaan' => 'required|string',
+           ]);
+
         $hasil_array = $request->json('hasil');
         // Generate polygon
         $latlng_array = $request->json('latlng');
@@ -25,22 +32,20 @@ class OrderController extends Controller
                 $odd[] = $value;
             }
         }
-        $this->validate($request, [
-         'mulai' => 'required|string',
-         'akhir' => 'required|string',
-         'kegunaan' => 'required|string',
-        ]);
-        
+       
         // Generated subject
         $carbon = Carbon::now();
         $subject =  $carbon->format('d-M-Y H:i A');
       // date("j M, Y", strtotime($b));
+
         // Generated orderhours
         $mulai = Carbon::createFromFormat('Y-m-d', $request->json('mulai'));
         $akhir = Carbon::createFromFormat('Y-m-d', $request->json('akhir'));
         $orderhourduration = $mulai->diffInHours($akhir);
+
+
         // Store order
-           $result_order = Order::create([
+        $result_order = Order::create([
             'subject' => $subject,
             'createdby' => $request->json('createdby_id'),
             'dtprojectstart' => $mulai,
@@ -49,22 +54,23 @@ class OrderController extends Controller
             'orderhourduration' => $orderhourduration,
             'comment' => $request->json('comment')
         ]);  
-          foreach($hasil_array as $hasil ){
-             $result_order_output = Order_output::create([
+        foreach($hasil_array as $hasil ){
+            $result_order_output = Order_output::create([
                 'order_id' => $result_order->id,
                 'output_id' => $hasil
              ]);
         }
-        
-        $count = count($even);
+            // Store order_location
+         $count = count($even);
             for ($i = 0; $i < $count ; $i++) {
                 $result_order_polygon = Order_location::create([
-                    'latitude' => $odd[$i],
-                    'longitude' => $even[$i]
+                    'order_id' => $result_order->id,
+                    'latitude' => $even[$i],
+                    'longitude' => $odd[$i]
                 ]);
         }
 
-        if($result_order && $result_order_output){
+        if($result_order && $result_order_output && $result_order_polygon){
             return response()->json([
                 'success' => true
                 ]);

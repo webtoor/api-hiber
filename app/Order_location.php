@@ -8,6 +8,8 @@ class Order_location extends Model
 {
     protected $table = 'order_locations';
     protected $fillable = [
-        'latitude','longitude'
+        'order_id','latitude','longitude'
     ];
+
+    public $timestamps = false;
 }
