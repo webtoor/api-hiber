@@ -36,7 +36,7 @@ class OrderController extends Controller
             'dtprojectend' => $akhir,
             'projecttype' => $request->json('kegunaan'),
             'orderhourduration' => $orderhourduration,
-            'comment' => 'adssda'
+            'comment' => $request->json('comment')
         ]);  
           foreach($hasil_array as $hasil ){
              $result_order_output = Order_output::create([
