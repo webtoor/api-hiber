@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-
 use App\Order;
+use App\Order_output;
+
 class OrderController extends Controller
 {
     public function create(Request $request){
@@ -38,9 +39,12 @@ class OrderController extends Controller
             'comment' => 'adssda'
         ]);  
           foreach($hasil_array as $hasil ){
-             $result_order_output = adasdsa;
+             $result_order_output = Order_output::create([
+                'order_id' => $result_order->id,
+                'output_id' => $hasil
+             ]);
         }
-        if($result_order){
+        if($result_order && $result_order_output){
             return response()->json([
                 'success' => true
                 ]);
