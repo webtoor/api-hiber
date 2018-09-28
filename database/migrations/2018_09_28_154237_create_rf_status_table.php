@@ -15,7 +15,7 @@ class CreateRfStatusTable extends Migration
     {
         Schema::create('rf_status', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->string('description');
         });
     }
 
