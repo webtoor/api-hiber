@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Order;
 use App\Order_output;
 use App\Order_location;
+use App\Order_status;
 
 class OrderController extends Controller
 {
@@ -54,6 +55,8 @@ class OrderController extends Controller
             'orderhourduration' => $orderhourduration,
             'comment' => $request->json('comment')
         ]);  
+
+        // Store order_outputs
         foreach($hasil_array as $hasil ){
             $result_order_output = Order_output::create([
                 'order_id' => $result_order->id,
@@ -69,6 +72,14 @@ class OrderController extends Controller
                     'longitude' => $odd[$i]
                 ]);
         }
+
+        // Store Order_status
+        $status_id = '1';
+        $result_order_status = Order_status::create([
+            'order_id' => $result_order->id,
+            'status_id' => $status_id,
+            'changedby_id' => $request->json('createdby_id')
+        ]);
 
         if($result_order && $result_order_output && $result_order_polygon){
             return response()->json([
