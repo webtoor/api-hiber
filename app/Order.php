@@ -11,4 +11,7 @@ class Order extends Model
         'subject', 'createdby', 'dtprojectstart', 'dtprojectend','projecttype', 'orderhourduration', 'comment'
     ];
     //public $timestamps = false;
+    public function order_status(){
+        return $this->hasOne('App\Order_status', 'order_id', 'id');
+    }
 }

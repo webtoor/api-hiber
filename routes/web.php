@@ -24,6 +24,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
     $router->group(['prefix' => 'user'], function () use ($router) {
         $router->post('order', ['uses' => 'OrderController@create']);
         $router->get('show', ['uses' => 'UserController@show']);
-        $router->get('project/{order_id}', ['uses' => 'ProjectController@show']);
+        $router->get('order_status/{createdby}', ['uses' => 'ProjectController@show']);
       });
   });
