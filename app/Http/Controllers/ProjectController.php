@@ -7,15 +7,18 @@ use App\Order;
 use App\Order_status;
 class ProjectController extends Controller
 {
-    public function show($createdby){
-       /* $result = Order_status::where('changedby_id', $createdby)->first();
-       return $result->order; */
-       $results = Order::with('order_status')->where('createdby', $createdby)->get();
+    public function show($user_id){
+        
+       $results = Order_status::with('order')->where('changedby_id', $user_id)->get();
         
         if($results){
             return response()->json([
                 'succes' => true,
                 'order' => $results
+            ]);
+        }else{
+            return response()->json([
+                'succes' => false,
             ]);
         }
 

@@ -10,6 +10,8 @@ class Order_status extends Model
     protected $fillable = [
         'order_id','status_id','changedby_id'
     ];
+    protected $hidden = ['created_at', 'updated_at', 'id', 'changedby_id'];
+
     public $timestamps = true;
 
     public function order(){
