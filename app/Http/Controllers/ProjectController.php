@@ -11,7 +11,7 @@ class ProjectController extends Controller
 {
     public function show($user_id){
         
-       $results = Order_status::with('order')->where('changedby_id', $user_id)->get();
+       $results = Order_status::with('order')->where('changedby_id', $user_id)->orderBy('id', 'desc')->get();
         
         if($results){
             return response()->json([
