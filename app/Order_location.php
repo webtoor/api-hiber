@@ -10,6 +10,6 @@ class Order_location extends Model
     protected $fillable = [
         'order_id','latitude','longitude'
     ];
-
+    protected $hidden = ['id'];
     public $timestamps = false;
 }

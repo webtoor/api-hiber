@@ -10,5 +10,6 @@ class Order_output extends Model
     protected $fillable = [
         'order_id','output_id'
     ];
+    protected $hidden = ['id'];
     public $timestamps = false;
 }

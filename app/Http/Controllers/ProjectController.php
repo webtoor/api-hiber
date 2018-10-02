@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\Order_status;
 use App\Order_location;
+use App\Order_output;
 
 class ProjectController extends Controller
 {
@@ -25,7 +26,13 @@ class ProjectController extends Controller
         }        
     }
     public function showPolygon($order_id){
-        return $result = Order_location::where('order_id', $order_id)->get();
+         $result_polygon = Order_location::where('order_id', $order_id)->get();
+         $result_output = Order_output::where('order_id', $order_id)->get();
+         return response()->json([
+            'success' => true,
+            'polygon' => $result_polygon,
+            'output' => $result_output
+         ]);
     }
 
 }
