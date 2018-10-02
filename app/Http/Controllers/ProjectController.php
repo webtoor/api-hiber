@@ -28,11 +28,18 @@ class ProjectController extends Controller
     public function showPolygon($order_id){
          $result_polygon = Order_location::where('order_id', $order_id)->get();
          $result_output = Order_output::where('order_id', $order_id)->get();
-         return response()->json([
+
+         if($result_polygon && $result_output){
+             return response()->json([
             'success' => true,
             'polygon' => $result_polygon,
             'output' => $result_output
          ]);
+         }else{
+            return response()->json([
+                'success' => false,
+             ]);
+         }
     }
 
 }
