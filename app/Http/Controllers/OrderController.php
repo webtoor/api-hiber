@@ -15,6 +15,7 @@ class OrderController extends Controller
         
          // Validate
          $this->validate($request, [
+            'subject'  => 'required|string',
             'mulai' => 'required|string',
             'akhir' => 'required|string',
             'kegunaan' => 'required|string',
@@ -35,9 +36,11 @@ class OrderController extends Controller
         }
        
         // Generated subject
-        $carbon = Carbon::now();
-        $subject =  $carbon->format('d-M-Y H:i A');
+       /*  $carbon = Carbon::now();
+        $subject =  $carbon->format('d-M-Y H:i A'); */
       // date("j M, Y", strtotime($b));
+
+
 
         // Generated orderhours
         $mulai = Carbon::createFromFormat('Y-m-d', $request->json('mulai'));
@@ -47,7 +50,7 @@ class OrderController extends Controller
 
         // Store order
         $result_order = Order::create([
-            'subject' => $subject,
+            'subject' =>$request->json('subject'),
             'createdby' => $request->json('createdby_id'),
             'dtprojectstart' => $mulai,
             'dtprojectend' => $akhir,
