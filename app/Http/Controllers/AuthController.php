@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
-/* use GuzzleHttp\Client; */
 use App\User;
 use App\User_role;
 
@@ -110,6 +108,13 @@ class AuthController extends Controller
     }
 
     public function logins (Request $request){
-        return $result = $request->json()->all();
+        $result = $request->json()->all();
+        $this->validate($request, [
+            'username' => 'required|string',
+            'email'    => 'required|email|unique:rf_users',
+            'phonenumber' => 'required|numeric|min:10',
+            'password' => 'required|string|min:5|confirmed',
+            'registerType' => 'required|string'
+        ]);
     }
 }
