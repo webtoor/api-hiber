@@ -110,6 +110,6 @@ class AuthController extends Controller
     }
 
     public function logins (){
-        return "HAHAHAHA";
+        $result = $request->json()->all();
     }
 }
