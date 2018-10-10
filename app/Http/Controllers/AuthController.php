@@ -109,13 +109,20 @@ class AuthController extends Controller
 
     public function logins (Request $request){
         //return $result = $request->json()->all(); // Ok
-        return $result = $request->json('username');
+        $result = $request->json('username');
         $this->validate($request, [
             'username' => 'required|string',
             'email'    => 'required|email|unique:rf_users',
             'phonenumber' => 'required|numeric|min:10',
             'password' => 'required|string|min:5|confirmed',
             'registerType' => 'required|string'
+        ]);
+
+        return $resultUser = User::create([
+            'username' => $request->json('username'),
+            'email' => $request->json('email'),
+            'phonenumber' => $request->json('phonenumber'),
+            'password' => Hash::make($request->json('password')),
         ]);
     }
 }
