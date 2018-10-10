@@ -15,6 +15,7 @@
 }); 
  
 
+
 $router->post('login', ['uses' => 'AuthController@login']);
 $router->post('register', ['uses' => 'AuthController@register']);
 
