@@ -109,7 +109,7 @@ class AuthController extends Controller
             'message' => 'Berhasil logout']);
     }
 
-    public function logins (){
-        $result = $request->json()->all();
+    public function logins (Request $request){
+        return $result = $request->json()->all();
     }
 }
