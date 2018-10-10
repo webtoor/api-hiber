@@ -113,6 +113,7 @@ $app->register(Barryvdh\Cors\ServiceProvider::class);
 | can respond to, as well as the controllers that may handle them.
 |
 */
+$debug = env('APP_DEBUG', true);
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
