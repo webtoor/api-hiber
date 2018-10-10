@@ -108,7 +108,8 @@ class AuthController extends Controller
     }
 
     public function logins (Request $request){
-        return $result = $request->json()->all();
+        //return $result = $request->json()->all(); // Ok
+        return $result = $request->json('username');
         $this->validate($request, [
             'username' => 'required|string',
             'email'    => 'required|email|unique:rf_users',
