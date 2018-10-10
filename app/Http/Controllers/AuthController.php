@@ -15,7 +15,13 @@ class AuthController extends Controller
     public function register(Request $request){
         /* $result = $request->json()->all(); */
             // Validasi
-       
+       $this->validate($request, [
+            'username' => 'required|string',
+            'email'    => 'required|email|unique:rf_users',
+            'phonenumber' => 'required|numeric|min:10',
+            'password' => 'required|string|min:5|confirmed',
+            'registerType' => 'required|string'
+        ]);
 
             // Create User
         $resultUser = User::create([
@@ -102,8 +108,8 @@ class AuthController extends Controller
     }
 
     public function logins (Request $request){
-        $result = $request->json()->all();
-        return $this->validate($request, [
+        return $result = $request->json()->all();
+        $this->validate($request, [
             'username' => 'required|string',
             'email'    => 'required|email|unique:rf_users',
             'phonenumber' => 'required|numeric|min:10',
