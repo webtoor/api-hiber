@@ -108,4 +108,8 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Berhasil logout']);
     }
+
+    public function logins (){
+        return "HAHAHAHA";
+    }
 }
