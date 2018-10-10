@@ -107,15 +107,4 @@ class AuthController extends Controller
             'message' => 'Berhasil logout']);
     }
 
-    public function logins (Request $request){
-        //return $result = $request->json()->all(); // Ok
-        $result = $request->json('username');
-       
-
-        return $resultUser = User::create([
-            'username' => $request->json('username'),
-            'email' => $request->json('email'),
-            'phonenumber' => $request->json('phonenumber'),
-        ]);
-    }
 }
