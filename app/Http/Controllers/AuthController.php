@@ -49,41 +49,44 @@ class AuthController extends Controller
      
     }
 
-    public function login (Request $request){
+    public function login_user (Request $request){
 
          $this->validate($request,[
             'email' => 'required',
             'password' => 'required',
-            'user_role' => 'required'
         ]);    
 
         global $app; 
 
         $email = $request->json('email');
         $password = $request->json('password');
-        $user_role = $request->json('user_role');
+        $user_role = '2';
 
-        $params = [
-            'grant_type'=>'password',
-            'client_id' =>'1',
-            'client_secret'=>'R1lAPTRrfvY102gLzVC1TU2hCq2gqfOUosNah4Mj',
-            'username'  => $email,
-            'password'  => $password,
-            'scope'     => '*'
-        ];
-        
-        $proxy = Request::create('/oauth/token','post', $params);
-        $response = $app->dispatch($proxy);
-        $json = (array) json_decode($response->getContent());
         $resultUser = User::where('email', $email)->first();
             if(!$resultUser){
                 // Email not exist 
-                return $response;
+                return response()->json([
+                    "error" => "invalid_credentials",
+                    "message" => "The user credentials were incorrect"
+                   ]);
             }
             if(Hash::check($password, $resultUser->password) ) {
 
                 // Email && Password exist + Check user_role
                 if(($user_role) == ($resultUser->role->rf_role_id)){
+
+                $params = [
+                    'grant_type'=>'password',
+                    'client_id' => '2',
+                    'client_secret'=> 'QiH3rLWJ0aY0vYCh7czqiX8m9yOMaFEOvIdMFsFh',
+                    'username'  => $email,
+                    'password'  => $password,
+                    'scope'     => '*'
+                ];
+                
+                $proxy = Request::create('/oauth/token','post', $params);
+                $response = $app->dispatch($proxy);
+                $json = (array) json_decode($response->getContent());
                 $json['id'] = $resultUser->id;
                 $json['email'] = $resultUser->email;
                 return $response->setContent(json_encode($json)); 
@@ -97,9 +100,70 @@ class AuthController extends Controller
                 }
             }else{
                 //Email exist, Password not exist
-                return $response;
+                return response()->json([
+                    "error" => "invalid_credentials",
+                    "message" => "The user credentials were incorrect"
+                   ]);
             } 
     }
+
+    public function login_provider (Request $request){
+
+        $this->validate($request,[
+           'email' => 'required',
+           'password' => 'required',
+       ]);    
+
+       global $app; 
+
+       $email = $request->json('email');
+       $password = $request->json('password');
+       $user_role = '1';
+
+       $resultUser = User::where('email', $email)->first();
+           if(!$resultUser){
+               // Email not exist 
+               return response()->json([
+                   "error" => "invalid_credentials",
+                   "message" => "The user credentials were incorrect"
+                  ]);
+           }
+           if(Hash::check($password, $resultUser->password) ) {
+
+               // Email && Password exist + Check user_role
+               if(($user_role) == ($resultUser->role->rf_role_id)){
+
+               $params = [
+                   'grant_type'=>'password',
+                   'client_id' => '1',
+                   'client_secret'=> 'R1lAPTRrfvY102gLzVC1TU2hCq2gqfOUosNah4Mj',
+                   'username'  => $email,
+                   'password'  => $password,
+                   'scope'     => '*'
+               ];
+               
+               $proxy = Request::create('/oauth/token','post', $params);
+               $response = $app->dispatch($proxy);
+               $json = (array) json_decode($response->getContent());
+               $json['id'] = $resultUser->id;
+               $json['email'] = $resultUser->email;
+               return $response->setContent(json_encode($json)); 
+
+               }else{
+                   // != User role
+                   return response()->json([
+                    "error" => "invalid_credentials",
+                    "message" => "The user credentials were incorrect"
+                   ]);
+               }
+           }else{
+               //Email exist, Password incorrect
+               return response()->json([
+                   "error" => "invalid_credentials",
+                   "message" => "The user credentials were incorrect"
+                  ]);
+           } 
+   }
 
     public function logout(){
        $accessToken = Auth::user()->token();

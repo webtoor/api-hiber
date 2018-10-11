@@ -16,7 +16,9 @@
  
 
 
-$router->post('login', ['uses' => 'AuthController@login']);
+$router->post('login_user', ['uses' => 'AuthController@login_user']);
+$router->post('login_provider', ['uses' => 'AuthController@login_provider']);
+
 $router->post('testsatu', ['uses' => 'AuthController@testsatu']);
 
 
@@ -33,3 +35,4 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
 
       });
   });
+
