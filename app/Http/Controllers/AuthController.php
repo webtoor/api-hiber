@@ -82,15 +82,19 @@ class AuthController extends Controller
             }
             if(Hash::check($password, $resultUser->password) ) {
 
-                // Email && Password exist
+                // Email && Password exist + Check user_role
                 if(($user_role) == ($resultUser->role->rf_role_id)){
                 $json['id'] = $resultUser->id;
                 $json['email'] = $resultUser->email;
                 return $response->setContent(json_encode($json)); 
 
+                }else{
+                    // != User role
+                    return response()->json([
+                     "error" => "invalid_credentials",
+                     "message" => "The user credentials were incorrect"
+                    ]);
                 }
-               
-
             }else{
                 //Email exist, Password not exist
                 return $response;
