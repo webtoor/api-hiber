@@ -11,4 +11,7 @@ class User_role extends Model
         'user_id', 'rf_role_id'
     ];
     public $timestamps = false;
+    protected $hidden = [
+        'id',
+    ];
 }

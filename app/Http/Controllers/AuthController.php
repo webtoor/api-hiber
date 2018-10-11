@@ -53,13 +53,15 @@ class AuthController extends Controller
 
          $this->validate($request,[
             'email' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+            'user_role' => 'required'
         ]);    
 
         global $app; 
 
         $email = $request->json('email');
         $password = $request->json('password');
+        $user_role = $request->json('user_role');
 
         $params = [
             'grant_type'=>'password',
@@ -79,10 +81,15 @@ class AuthController extends Controller
                 return $response;
             }
             if(Hash::check($password, $resultUser->password) ) {
+
                 // Email && Password exist
+                if(($user_role) == ($resultUser->role->rf_role_id)){
                 $json['id'] = $resultUser->id;
                 $json['email'] = $resultUser->email;
                 return $response->setContent(json_encode($json)); 
+
+                }
+               
 
             }else{
                 //Email exist, Password not exist
@@ -105,6 +112,14 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Berhasil logout']);
+    }
+
+    public function testsatu (Request $request){
+        $email = $request->json('email');
+
+         $resultUser = User::where('email', $email)->first();
+         return $resultUser->role;
+        
     }
 
 }

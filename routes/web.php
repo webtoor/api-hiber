@@ -17,6 +17,9 @@
 
 
 $router->post('login', ['uses' => 'AuthController@login']);
+$router->post('testsatu', ['uses' => 'AuthController@testsatu']);
+
+
 $router->post('register', ['uses' => 'AuthController@register']);
 
 $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
