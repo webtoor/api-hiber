@@ -40,6 +40,11 @@ class ProjectController extends Controller
                 'success' => false,
              ]);
          }
+
+    }
+
+    public function updateStatus (Request $request, $order_id){
+        return Order_status::where('order_id',$order_id)->first();
     }
 
 }

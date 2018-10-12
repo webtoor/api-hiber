@@ -182,12 +182,4 @@ class AuthController extends Controller
             'message' => 'Berhasil logout']);
     }
 
-    public function testsatu (Request $request){
-        $email = $request->json('email');
-
-         $resultUser = User::where('email', $email)->first();
-         return $resultUser->role;
-        
-    }
-
 }

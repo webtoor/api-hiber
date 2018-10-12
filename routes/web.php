@@ -19,9 +19,6 @@
 $router->post('login_user', ['uses' => 'AuthController@login_user']);
 $router->post('login_provider', ['uses' => 'AuthController@login_provider']);
 
-$router->post('testsatu', ['uses' => 'AuthController@testsatu']);
-
-
 $router->post('register', ['uses' => 'AuthController@register']);
 
 $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
@@ -31,8 +28,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
     $router->group(['prefix' => 'user'], function () use ($router) {
         $router->post('order', ['uses' => 'OrderController@create']);
         $router->get('order_show/{user_id}', ['uses' => 'ProjectController@show']);
+        $router->put('order_status/{order_id}', ['uses' => 'ProjectController@updateStatus']);
         $router->get('polygon/{order_id}', ['uses' => 'ProjectController@showPolygon']);
-        $router->put('order_status/{order_id}', ['uses' => 'ProjectController@update']);
       });
   });
 
