@@ -27,12 +27,12 @@ $router->post('register', ['uses' => 'AuthController@register']);
 $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
     $router->get('logout', ['uses' => 'AuthController@logout']);
 
+    /* USER  */
     $router->group(['prefix' => 'user'], function () use ($router) {
         $router->post('order', ['uses' => 'OrderController@create']);
-        //$router->get('show', ['uses' => 'UserController@show']);
-        $router->get('order_status/{user_id}', ['uses' => 'ProjectController@show']);
+        $router->get('order_show/{user_id}', ['uses' => 'ProjectController@show']);
         $router->get('polygon/{order_id}', ['uses' => 'ProjectController@showPolygon']);
-
+        $router->put('order_status/{order_id}', ['uses' => 'ProjectController@update']);
       });
   });
 
