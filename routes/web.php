@@ -30,6 +30,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('order_show/{user_id}', ['uses' => 'ProjectController@show']);
         $router->put('order_status/{order_id}', ['uses' => 'ProjectController@updateStatus']);
         $router->get('polygon/{order_id}', ['uses' => 'ProjectController@showPolygon']);
+        $router->get('order_history/{user_id}', ['uses' => 'ProjectController@history']);
       });
   });
 

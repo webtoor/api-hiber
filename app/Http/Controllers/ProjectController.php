@@ -44,7 +44,8 @@ class ProjectController extends Controller
     }
 
     public function updateStatus (Request $request, $order_id){
-        $result = Order_status::where('order_id',$order_id)->update(['status_id' => '4']);
+        $status = $request->json('status');
+        $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status]);
         if($result){
             return response()->json([
                 "success" => true,
