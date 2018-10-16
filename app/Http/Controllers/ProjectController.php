@@ -59,7 +59,7 @@ class ProjectController extends Controller
     }
 
     public function history ($user_id){
-        return $results = Order_status::with('order')->where('changedby_id', $user_id)->whereIn('status_id', ['3', '4'])->orderBy('id', 'desc')->get();
+       $results = Order_status::with('order')->where('changedby_id', $user_id)->whereIn('status_id', ['3', '4'])->orderBy('id', 'desc')->get();
         
         if($results){
             return response()->json([
