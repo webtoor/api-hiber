@@ -18,10 +18,12 @@ class CreateOrderStatusTable extends Migration
             $table->integer('order_id')->unsigned();
             $table->integer('status_id')->unsigned();
             $table->integer('changedby_id')->unsigned();
+            $table->integer('doneby_id')->unsigned();
             $table->timestamps();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('status_id')->references('id')->on('rf_status')->onDelete('cascade');
             $table->foreign('changedby_id')->references('id')->on('rf_users')->onDelete('cascade');
+            $table->foreign('doneby_id')->references('id')->on('rf_users')->onDelete('cascade');
         });
     }
 
