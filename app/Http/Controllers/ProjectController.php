@@ -75,6 +75,18 @@ class ProjectController extends Controller
     }
 
     public function proposal($order_id){
-        return Order_proposal::with('user')->where('order_id', $order_id)->get();
+        $results = Order_proposal::with('user')->where('order_id', $order_id)->get();
+
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $result
+            ]);
+        } 
     }
 }
