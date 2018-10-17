@@ -73,4 +73,7 @@ class ProjectController extends Controller
         } 
     }
 
+    public function proposal($order_id){
+        return "JUAANNCCOOOOKKK";
+    }
 }
