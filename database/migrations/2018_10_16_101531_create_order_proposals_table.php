@@ -20,6 +20,8 @@ class CreateOrderProposalsTable extends Migration
             $table->double('offered_price');
             $table->text('comment');
             $table->timestamps();
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('proposal_by')->references('id')->on('rf_users')->onDelete('cascade');
         });
     }
 

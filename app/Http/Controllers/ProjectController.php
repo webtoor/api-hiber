@@ -7,6 +7,7 @@ use App\Order;
 use App\Order_status;
 use App\Order_location;
 use App\Order_output;
+use App\Order_proposal;
 
 class ProjectController extends Controller
 {
@@ -74,6 +75,6 @@ class ProjectController extends Controller
     }
 
     public function proposal($order_id){
-        return "JUAANNCCOOOOKKK";
+        return Order_proposal::with('user')->where('order_id', $order_id)->get();
     }
 }

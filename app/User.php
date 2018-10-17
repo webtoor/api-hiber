@@ -46,4 +46,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function order_status(){
         return $this->hasOne('App\Order_status', 'doneby_id');
     }
+    public function proposal(){
+        return $this->hasOne('App\Order_proposal', 'proposal_by');
+    }
 }
