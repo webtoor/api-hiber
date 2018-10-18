@@ -101,20 +101,20 @@ class ProjectController extends Controller
 
 
     public function getRating($order_id){
-        return $results = Order_status::with('user')->where('order_id', $order_id)->get();
+        $results = Order_proposal::with('user')->where('order_id', $order_id)->get();
         if($results){
             return response()->json([
                 'success' => true,
-                'data' => $results->provider_id
+                'data' => $results
             ]);
         }else{
             return response()->json([
                 'success' => false,
-                'data' => $results->provider_id
+                'data' => $results
             ]);
         } 
     }
     public function feedback(Request $request,$order_id){
-        return $order_id;
+        
     }
 }
