@@ -8,7 +8,7 @@ class Order_status extends Model
 {
     protected $table = 'order_status';
     protected $fillable = [
-        'order_id','status_id','changedby_id', 'doneby_id'
+        'order_id','status_id','changedby_id', 'provider_id'
     ];
     protected $hidden = ['created_at', 'updated_at', 'id', 'changedby_id'];
 
@@ -19,6 +19,6 @@ class Order_status extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\User', 'doneby_id', 'id');
+        return $this->belongsTo('App\User', 'provider_id', 'id');
     }
 }

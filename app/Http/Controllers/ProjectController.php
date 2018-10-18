@@ -46,7 +46,8 @@ class ProjectController extends Controller
 
     public function updateStatus (Request $request, $order_id){
         $status = $request->json('status');
-        $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status]);
+        $provider_id = $request->json('provider_id');
+        $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
         if($result){
             return response()->json([
                 "success" => true,
@@ -90,7 +91,7 @@ class ProjectController extends Controller
         } 
     }
 
-    public function feedback($order_id){
+    public function feedback(Request $request,$order_id){
         return $order_id;
     }
 }
