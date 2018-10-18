@@ -32,7 +32,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('polygon/{order_id}', ['uses' => 'ProjectController@showPolygon']);
         $router->get('order_history/{user_id}', ['uses' => 'ProjectController@history']);
         $router->get('order_proposal/{order_id}', ['uses' => 'ProjectController@proposal']);
-
+        $router->post('order_feedback/{order_id}', ['uses' => 'ProjectController@feedback']);
       });
   });
 
