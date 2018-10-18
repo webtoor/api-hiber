@@ -8,6 +8,7 @@ use App\Order_status;
 use App\Order_location;
 use App\Order_output;
 use App\Order_proposal;
+use App\Order_feedback;
 
 class ProjectController extends Controller
 {
@@ -115,6 +116,25 @@ class ProjectController extends Controller
         } 
     }
     public function feedback(Request $request,$order_id){
-        
+        $writter = $request->json('writter');
+        $for = $request->json('for');
+        $rating = $request->json('rating');
+        $comment = $request->json('comment');
+        $results = Order_feedback::create([
+            'writter' => $writter,
+            'for' => $for,
+            'order_id' => $order_id,
+            'rating' => $rating,
+            'comment' => $comment,
+        ]);
+        if($results){
+            return response()->json([
+                'success' => true,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+            ]);
+        } 
     }
 }
