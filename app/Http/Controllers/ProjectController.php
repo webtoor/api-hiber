@@ -47,7 +47,15 @@ class ProjectController extends Controller
     public function updateStatus (Request $request, $order_id){
         $status = $request->json('status');
         $provider_id = $request->json('provider_id');
-        $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+       
+        if($provider_id){
+             // GUNAKAN
+            $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+        }else{
+            // CANCEL
+            $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status]);
+        }
+
         if($result){
             return response()->json([
                 "success" => true,
@@ -91,6 +99,21 @@ class ProjectController extends Controller
         } 
     }
 
+
+    public function getRating($order_id){
+        return $results = Order_status::with('user')->where('order_id', $order_id)->get();
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results->provider_id
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results->provider_id
+            ]);
+        } 
+    }
     public function feedback(Request $request,$order_id){
         return $order_id;
     }
