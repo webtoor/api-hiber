@@ -37,7 +37,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password', 'created_at', 'updated_at'
     ];
 
     public function role(){
@@ -48,5 +48,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
     public function proposal(){
         return $this->hasOne('App\Order_proposal', 'proposal_by');
+    }
+    public function user_feedback(){
+        return $this->hasOne('App\User_feedback', 'user_id');
     }
 }

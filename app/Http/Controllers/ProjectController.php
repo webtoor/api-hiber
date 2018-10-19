@@ -9,6 +9,10 @@ use App\Order_location;
 use App\Order_output;
 use App\Order_proposal;
 use App\Order_feedback;
+use App\User_feedback;
+use App\User;
+
+
 
 class ProjectController extends Controller
 {
@@ -85,8 +89,7 @@ class ProjectController extends Controller
     }
 
     public function proposal($order_id){
-        $results = Order_proposal::with('user')->where('order_id', $order_id)->get();
-
+        $results = Order_proposal::with(['user', 'user_feedback'])->where('order_id', $order_id)->get();
         if($results){
             return response()->json([
                 'success' => true,

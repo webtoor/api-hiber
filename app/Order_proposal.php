@@ -17,4 +17,8 @@ class order_proposal extends Model
     public function user(){
         return $this->belongsTo('App\User', 'proposal_by', 'id');
     }
+
+    public function user_feedback(){
+        return $this->hasOne('App\User_feedback', 'user_id', 'proposal_by');
+    }
 }
