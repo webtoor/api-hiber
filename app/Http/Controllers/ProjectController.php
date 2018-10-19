@@ -54,7 +54,7 @@ class ProjectController extends Controller
         $provider_id = $request->json('provider_id');
        
         if($provider_id){
-             // GUNAKAN
+             // GUNAKAN && SELESAI
             $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
         }else{
             // CANCEL
@@ -95,7 +95,7 @@ class ProjectController extends Controller
             ->where('order_id', $order_id)->orderBy('id', 'desc')->get();
         }elseif($filter == '2'){
             // Rating
-            $results = User_feedback::with(['user', 'order_proposal' => function($query) use ($order_id) {
+            $results = User_feedback::with(['user', 'proposal' => function($query) use ($order_id) {
                 $query->where('order_id', $order_id);
             }])->orderBy('total_rating', 'desc')->get();
          
@@ -128,7 +128,7 @@ class ProjectController extends Controller
 
 
     public function getRating($order_id){
-        $results = Order_proposal::with('user')->where('order_id', $order_id)->get();
+        $results = Order_status::with('user')->where('order_id', $order_id)->where('status_id', '3')->first();
         if($results){
             return response()->json([
                 'success' => true,
