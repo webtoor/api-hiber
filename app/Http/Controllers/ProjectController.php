@@ -89,7 +89,30 @@ class ProjectController extends Controller
     }
 
     public function proposal($order_id, $filter){
-        $results = Order_proposal::with(['user', 'user_feedback'])->where('order_id', $order_id)->get();
+        if($filter == '1'){
+            // Default Data Terakhir
+            $results = Order_proposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->orderBy('id', 'desc')->get();
+        }elseif($filter == '2'){
+            // Rating
+            $results = User_feedback::with(['user', 'order_proposal' => function($query) use ($order_id) {
+                $query->where('order_id', $order_id);
+            }])->orderBy('total_rating', 'desc')->get();
+         
+        }elseif($filter == '3'){
+            // Termurah
+            $results = Order_proposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->orderBy('offered_price', 'asc')->get();
+        }elseif($filter == '4'){
+            // Termahal
+            $results = Order_proposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->orderBy('offered_price', 'desc')->get();
+        }else{
+            // Anythings
+            $results = Order_proposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->get();
+        }
+        
         if($results){
             return response()->json([
                 'success' => true,

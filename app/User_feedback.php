@@ -14,5 +14,14 @@ class User_feedback extends Model
 
     public $timestamps = true;
 
+    public function user_feedbacks(){
+        return $this->belongsTo('App\Order_proposal', 'user_id', 'proposal_by');
+    }
+    public function order_proposal(){
+        return $this->hasOne('App\Order_proposal', 'proposal_by', 'user_id');
+    }
+    public function user(){
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
 
 }
