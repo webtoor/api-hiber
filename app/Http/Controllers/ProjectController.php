@@ -123,6 +123,8 @@ class ProjectController extends Controller
         $for = $request->json('for');
         $rating = $request->json('rating');
         $comment = $request->json('comment');
+
+        // INSERT ORDER FEEDBACK
         $results = Order_feedback::create([
             'writter' => $writter,
             'for' => $for,
@@ -130,7 +132,26 @@ class ProjectController extends Controller
             'rating' => $rating,
             'comment' => $comment,
         ]);
-        if($results){
+        // TOTAL RATING PROVIDER ORDER_FEEDBACK
+        $total_rating = Order_feedback::where('for', $for)->avg('rating');
+        
+        // CHECK PROVIDER
+        $check_provider =  User_feedback::where('user_id', $for)->first();
+            
+        if($check_provider){
+            // JIKA ADA
+            $result_final = User_feedback::where('user_id', $for)->update([
+                'total_rating' => $total_rating
+            ]);
+        }else{
+            // TIDAK ADA
+           $result_final = User_feedback::create([
+                'user_id' => $for,
+                'total_rating' => $total_rating,
+            ]);
+        }
+
+        if($result_final){
             return response()->json([
                 'success' => true,
             ]);
