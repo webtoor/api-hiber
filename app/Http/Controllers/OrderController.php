@@ -91,4 +91,8 @@ class OrderController extends Controller
         } 
 
     }
+
+    public function timezone(){
+        return Carbon::now();
+    }
 }

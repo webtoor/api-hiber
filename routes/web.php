@@ -18,6 +18,7 @@
 
 $router->post('login_user', ['uses' => 'AuthController@login_user']);
 $router->post('login_provider', ['uses' => 'AuthController@login_provider']);
+$router->get('timezone', ['uses' => 'OrderController@timezone']);
 
 $router->post('register', ['uses' => 'AuthController@register']);
 
@@ -34,6 +35,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('order_proposal/{order_id}/{filter}', ['uses' => 'ProjectController@proposal']);
         $router->get('get_rating/{order_id}', ['uses' => 'ProjectController@getrating']);
         $router->post('order_feedback/{order_id}', ['uses' => 'ProjectController@feedback']);
+
+
       });
   });
 
