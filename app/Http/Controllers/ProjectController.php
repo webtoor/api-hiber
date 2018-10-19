@@ -88,7 +88,7 @@ class ProjectController extends Controller
         } 
     }
 
-    public function proposal($order_id){
+    public function proposal(Request $request,$order_id){
         $results = Order_proposal::with(['user', 'user_feedback'])->where('order_id', $order_id)->get();
         if($results){
             return response()->json([
