@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\User_role;
+use App\User_feedback;
 
 class AuthController extends Controller
 {
@@ -35,6 +36,12 @@ class AuthController extends Controller
             'user_id' => $resultUser->id,
             'rf_role_id' => $request->json('registerType')
         ]);
+
+        $resultFeedback = User_feedback::create([
+            'user_id' => $resultUser->id,
+            'total_rating' => '',
+        ]);
+
         if($resultUser && $resultRole){
             return response()->json([
                 'success' => true,
