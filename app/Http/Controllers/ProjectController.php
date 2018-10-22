@@ -73,21 +73,6 @@ class ProjectController extends Controller
 
     }
 
-    public function history ($user_id){
-       $results = Order_status::with('order', 'user')->where('changedby_id', $user_id)->whereIn('status_id', ['3', '4'])->orderBy('id', 'desc')->get();
-        
-        if($results){
-            return response()->json([
-                'success' => true,
-                'order' => $results
-            ]);
-        }else{
-            return response()->json([
-                'success' => false,
-            ]);
-        } 
-    }
-
     public function proposal($order_id, $filter){
         if($filter == '1'){
             // Default Data Terakhir
@@ -177,6 +162,37 @@ class ProjectController extends Controller
         if($result_final){
             return response()->json([
                 'success' => true,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+            ]);
+        } 
+    }
+
+
+    public function history ($user_id){
+        $results = Order_status::with('order', 'user')->where('changedby_id', $user_id)->whereIn('status_id', ['3', '4'])->orderBy('id', 'desc')->get();
+         
+         if($results){
+             return response()->json([
+                 'success' => true,
+                 'order' => $results
+             ]);
+         }else{
+             return response()->json([
+                 'success' => false,
+             ]);
+         } 
+     }
+
+    public function profilProvider($user_id){
+        $results = User::find($user_id);
+
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results
             ]);
         }else{
             return response()->json([
