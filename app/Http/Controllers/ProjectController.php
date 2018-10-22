@@ -80,25 +80,18 @@ class ProjectController extends Controller
             ->where('order_id', $order_id)->orderBy('id', 'desc')->get();
         }elseif($filter == '2'){
             // Rating
-            $check = Order_proposal::where('order_id', $order_id)->orderBy('id', 'desc')->first();
-            if ($check) {
-               /*  $results = User_feedback::with(['user', 'proposal' => function ($query) use ($order_id) {
-                    $query->where('order_id', $order_id);
-                }])->orderBy('total_rating', 'desc')->get(); */
-                $rest = Order_proposal::with(['user', 'user_feedback'])
-                ->where('order_id', $order_id)->orderBy('id', 'desc')->get();
+            /*  $results = User_feedback::with(['user', 'proposal' => function ($query) use ($order_id) {
+                $query->where('order_id', $order_id);
+            }])->orderBy('total_rating', 'desc')->get(); */
+            $rest = Order_proposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->orderBy('id', 'desc')->get();
 
-                $rest = $rest->sortByDesc(function ($item, $key) {
-                    return ($item['user_feedback']['total_rating']);
-                });
+            $rest = $rest->sortByDesc(function ($item, $key) {
+                return ($item['user_feedback']['total_rating']);
+            });
 
-                $results = $rest->values()->all();
+            $results = $rest->values()->all();
                
-                
-            } else{
-                $results = Order_proposal::where('order_id', $order_id)->get();
-            } 
-         
         }elseif($filter == '3'){
             // Termurah
             $results = Order_proposal::with(['user', 'user_feedback'])
