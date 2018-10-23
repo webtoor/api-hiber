@@ -13,7 +13,6 @@ use App\User_feedback;
 use App\User;
 
 
-
 class ProjectController extends Controller
 {
     public function show($user_id){

@@ -36,8 +36,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->post('order_feedback/{order_id}', ['uses' => 'ProjectController@feedback']);
         $router->get('order_history/{user_id}', ['uses' => 'ProjectController@history']);
         $router->get('profil_provider/{user_id}', ['uses' => 'ProjectController@profilProvider']);
-
-
       });
   });
 
