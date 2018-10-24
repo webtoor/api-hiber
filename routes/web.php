@@ -37,9 +37,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('order_history/{user_id}', ['uses' => 'ProjectController@history']);
         $router->get('profil_provider/{user_id}', ['uses' => 'ProjectController@profilProvider']);
       });
-
+     
+    /* SERVICE PROVIDER   */  
     $router->group(['prefix' => 'provider'], function () use($router){
-        $router->get('order_show/{user_id}', ['uses' => 'ProviderProjectController@show']);
+        $router->get('tawaran_show', ['uses' => 'ProviderProjectController@tawaranShow']);
     });
   });
 
