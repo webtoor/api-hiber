@@ -37,5 +37,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('order_history/{user_id}', ['uses' => 'ProjectController@history']);
         $router->get('profil_provider/{user_id}', ['uses' => 'ProjectController@profilProvider']);
       });
+
+    $router->group(['prefix' => 'provider'], function () use($router){
+
+    });
   });
 
