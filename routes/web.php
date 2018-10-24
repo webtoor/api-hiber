@@ -39,7 +39,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
       });
 
     $router->group(['prefix' => 'provider'], function () use($router){
-
+        $router->get('order_show/{user_id}', ['uses' => 'ProviderProjectController@show']);
     });
   });
 
