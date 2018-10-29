@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\Order_status;
 use App\Order_location;
+use App\Order_output;
 use App\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -50,16 +51,17 @@ class ProviderProjectController extends Controller
     }
 
     public function detailShow($order_id){
-        $results = Order_location::where('order_id', $order_id)->get();
-        if($results){
+        $results_polygon = Order_location::where('order_id', $order_id)->get();
+        $results_output = Order_location::where('order_id', $order_id)->get();
+        if($results_polygon && $results_output){
             return response()->json([
                 'success' => true,
-                'data' => $results
+                'polygon' => $results_polygon
             ]);
         }else{
             return response()->json([
                 'success' => false,
-                'data' => $results
+                'polygon' => $results_output
             ]);
         }
     }
