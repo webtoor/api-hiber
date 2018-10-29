@@ -16,4 +16,8 @@ class Order extends Model
     public function order_status(){
         return $this->hasOne('App\Order_status', 'order_id', 'id');
     }
+
+    public function user_client(){
+        return $this->belongsTo('App\User', 'createdby', 'id');
+    }
 }

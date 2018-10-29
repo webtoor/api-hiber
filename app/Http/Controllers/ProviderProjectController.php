@@ -6,14 +6,15 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\Order_status;
 use App\Order_location;
+use App\User;
+
 use Illuminate\Support\Facades\Auth;
 
 class ProviderProjectController extends Controller
 {
     public function tawaranShow(){
-        //return Order::with('order_status')->get();
         $status_id = '1';
-        $results = Order::with(['order_status' => function ($query) use ($status_id) {
+        $results = Order::with(['user_client','order_status' => function ($query) use ($status_id) {
                             $query->where('status_id', $status_id);
         }])->get();  
 
