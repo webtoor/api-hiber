@@ -52,16 +52,18 @@ class ProviderProjectController extends Controller
 
     public function detailShow($order_id){
         $results_polygon = Order_location::where('order_id', $order_id)->get();
-        $results_output = Order_location::where('order_id', $order_id)->get();
+        $results_output = Order_output::where('order_id', $order_id)->get();
         if($results_polygon && $results_output){
             return response()->json([
                 'success' => true,
-                'polygon' => $results_polygon
+                'polygon' => $results_polygon,
+                'output'   => $results_output,
             ]);
         }else{
             return response()->json([
                 'success' => false,
-                'polygon' => $results_output
+                'polygon' => $results_polygon,
+                'output'   => $results_output,
             ]);
         }
     }

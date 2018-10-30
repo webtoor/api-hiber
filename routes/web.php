@@ -18,7 +18,7 @@
 
 $router->post('login_user', ['uses' => 'AuthController@login_user']);
 $router->post('login_provider', ['uses' => 'AuthController@login_provider']);
-$router->get('timezone', ['uses' => 'OrderController@timezone']);
+//$router->get('timezone', ['uses' => 'OrderController@timezone']);
 
 $router->post('register', ['uses' => 'AuthController@register']);
 
@@ -43,6 +43,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('tawaran_show', ['uses' => 'ProviderProjectController@tawaranShow']);
         $router->get('berjalan_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanShow']);
         $router->get('detail_show/{order_id}', ['uses' => 'ProviderProjectController@detailShow']);
+        $router->post('bidding', ['uses' => 'ProviderProjectController@bidding']);
     });
   });
 
