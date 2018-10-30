@@ -7,6 +7,7 @@ use App\Order;
 use App\Order_status;
 use App\Order_location;
 use App\Order_output;
+use App\Order_proposal;
 use App\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -70,15 +71,14 @@ class ProviderProjectController extends Controller
 
     public function bidding(Request $request){
         $this->validate($request, [
-            'offered_price' => 'required|string',
+            'offered_price' => 'required',
            ]);
         $order_id = $request->json('order_id');
         $proposal_by = $request->json('proposal_by');
-        $offered_price = $request->json('harga');
+        $offered_price = $request->json('offered_price');
         $comment = $request->json('comment');
 
-
-       $results =  Order_proposal::create([
+       $results = Order_proposal::create([
             'order_id' => $order_id,
             'proposal_by' => $proposal_by,
             'offered_price' => $offered_price,
@@ -87,7 +87,8 @@ class ProviderProjectController extends Controller
 
         if($results){
             return response()->json([
-                'success' => true
+                'success' => true,
+                'data' => $results
             ]);
             return response()->json([
                 'success' => false

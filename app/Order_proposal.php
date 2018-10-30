@@ -8,7 +8,7 @@ class order_proposal extends Model
 {
     protected $table = 'order_proposals';
     protected $fillable = [
-        'order_id','proposal_by','offered_by', 'doneby_id'
+        'order_id','proposal_by','offered_price', 'comment'
     ];
     protected $hidden = ['created_at', 'updated_at', 'id',];
 
