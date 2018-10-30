@@ -67,4 +67,29 @@ class ProviderProjectController extends Controller
             ]);
         }
     }
+
+    public function bidding(Request $request){
+        $this->validate($request, [
+            'offered_price' => 'required|string',
+           ]);
+        $order_id = $request->json('order_id');
+        $proposal_by = $request->json('proposal_by');
+        $offered_price = $request->json('harga');
+
+       $results =  Order_proposal::create([
+            'order_id' => $order_id,
+            'proposal_by' => $proposal_by,
+            'offered_price' => $offered_price,
+        ]);
+
+        if($results){
+            return response()->json([
+                'success' => true
+            ]);
+            return response()->json([
+                'success' => false
+            ]);
+        }
+
+    }
 }
