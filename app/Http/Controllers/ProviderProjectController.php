@@ -75,11 +75,14 @@ class ProviderProjectController extends Controller
         $order_id = $request->json('order_id');
         $proposal_by = $request->json('proposal_by');
         $offered_price = $request->json('harga');
+        $comment = $request->json('comment');
+
 
        $results =  Order_proposal::create([
             'order_id' => $order_id,
             'proposal_by' => $proposal_by,
             'offered_price' => $offered_price,
+            'comment' => $comment,
         ]);
 
         if($results){
