@@ -34,22 +34,7 @@ class ProviderProjectController extends Controller
                         
     }
 
-    public function berjalanShow($provider_id){
-        $status_id = '2';
-        $results = Order_status::with(['order'])->where('provider_id', $provider_id)->get(); 
-        
-        if($results){
-            return response()->json([
-                'success' => true,
-                'data' => $results
-            ]);
-        }else{
-            return response()->json([
-                'success' => false,
-                'data' => $results
-            ]);
-        }
-    }
+  
 
     public function detailShow($order_id){
         $results_polygon = Order_location::where('order_id', $order_id)->get();
@@ -96,5 +81,27 @@ class ProviderProjectController extends Controller
             ]);
         }
 
+    }
+
+    public function berjalanIkutiShow($provider_id){
+       // $status_id = '2';
+         $results = Order_proposal::with('order')->where('proposal_by', $provider_id)->get(); 
+   /*      foreach($results as $proposal){
+           $results_order[] = Order::where('id', $proposal['order_id'])->get(); 
+        }
+        return $results_order; */
+        //$results_kerja = Order_status::with(['order'])->where('provider_id', $provider_id)->get(); 
+        
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results,
+            ]);
+        }
     }
 }
