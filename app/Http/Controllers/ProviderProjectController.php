@@ -104,6 +104,19 @@ class ProviderProjectController extends Controller
     }
 
     public function berjalanKerjaShow($provider_id){
-
+        $status_id = '2';
+        return $results = Order_status::with(['order', 'proposal_by'])->where(['provider_id' => $provider_id, 'status_id' => $status_id])->get(); 
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results,
+            ]);
+        }
     }
+
 }
