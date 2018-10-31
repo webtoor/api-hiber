@@ -24,4 +24,7 @@ class Order_status extends Model
     public function proposal_by(){
         return $this->belongsTo('App\Order_proposal', 'provider_id', 'proposal_by');
     }
+    public function user_client(){
+        return $this->belongsTo('App\User', 'provider_id', 'id');
+    }
 }
