@@ -85,7 +85,9 @@ class ProviderProjectController extends Controller
 
     public function berjalanIkutiShow($provider_id){
        // $status_id = '2';
-         $results = Order_proposal::with('order')->where('proposal_by', $provider_id)->get(); 
+         $results = Order_proposal::with(['order' => function ($query) {
+            $query->with('user_client');
+        }])->where('proposal_by', $provider_id)->get(); 
    /*      foreach($results as $proposal){
            $results_order[] = Order::where('id', $proposal['order_id'])->get(); 
         }
