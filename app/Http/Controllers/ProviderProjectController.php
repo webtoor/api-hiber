@@ -17,8 +17,7 @@ class ProviderProjectController extends Controller
     public function tawaranShow(){
         $status_id = '1';
         $results = Order::with(['user_client','order_status' => function ($query) use ($status_id) {
-                            $query->where('status_id', $status_id);
-        }])->get();  
+                $query->where('status_id', $status_id); }])->get();  
 
         if($results){
             return response()->json([
@@ -88,10 +87,7 @@ class ProviderProjectController extends Controller
          $results = Order_proposal::with(['order' => function ($query) {
             $query->with('user_client');
         }])->where('proposal_by', $provider_id)->get(); 
-   /*      foreach($results as $proposal){
-           $results_order[] = Order::where('id', $proposal['order_id'])->get(); 
-        }
-        return $results_order; */
+  
         //$results_kerja = Order_status::with(['order'])->where('provider_id', $provider_id)->get(); 
         
         if($results){
