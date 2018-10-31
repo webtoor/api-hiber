@@ -91,7 +91,8 @@ class ProviderProjectController extends Controller
                 'data' => $results
             ]);
             return response()->json([
-                'success' => false
+                'success' => false,
+                'data' => $results
             ]);
         }
 

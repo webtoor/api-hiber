@@ -41,9 +41,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
     /* SERVICE PROVIDER   */  
     $router->group(['prefix' => 'provider'], function () use($router){
         $router->get('tawaran_show', ['uses' => 'ProviderProjectController@tawaranShow']);
-        $router->get('berjalan_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanShow']);
         $router->get('detail_show/{order_id}', ['uses' => 'ProviderProjectController@detailShow']);
         $router->post('bidding', ['uses' => 'ProviderProjectController@bidding']);
+        $router->get('berjalan_ikuti_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanIkutiShow']);
+
     });
   });
 
