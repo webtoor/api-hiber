@@ -39,7 +39,7 @@ class AuthController extends Controller
 
         $resultFeedback = User_feedback::create([
             'user_id' => $resultUser->id,
-            'total_rating' => '',
+            'total_rating' => 0,
         ]);
 
         if($resultUser && $resultRole){

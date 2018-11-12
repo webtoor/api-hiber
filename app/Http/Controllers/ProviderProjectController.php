@@ -9,11 +9,26 @@ use App\Order_location;
 use App\Order_output;
 use App\Order_proposal;
 use App\User;
-
+use App\User_feedback;
 use Illuminate\Support\Facades\Auth;
 
 class ProviderProjectController extends Controller
-{
+{   
+    public function getRatingShow($provider_id){
+        $results =  User_feedback::where('user_id', $provider_id)->first();
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results
+            ]);
+        }
+    }
+
     public function tawaranShow(){
         $status_id = '1';
         $results = Order::with(['user_client','order_status' => function ($query) use ($status_id) {
@@ -32,8 +47,6 @@ class ProviderProjectController extends Controller
         }
                         
     }
-
-  
 
     public function detailShow($order_id){
         $results_polygon = Order_location::where('order_id', $order_id)->get();
