@@ -15,10 +15,10 @@ class Order_feedback extends Model
     public $timestamps = true;
 
     public function client(){
-        return $this->hasOne('App\User', 'id', 'writter');
+        return $this->belongsTo('App\User', 'writter', 'id');
     }
 
     public function order(){
-        return $this->hasOne('App\Order', 'id', 'order_id');
+        return $this->belongsTo('App\Order', 'order_id', 'id');
     }
 }
