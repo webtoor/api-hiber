@@ -13,4 +13,12 @@ class Order_feedback extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     public $timestamps = true;
+
+    public function client(){
+        return $this->hasOne('App\User', 'id', 'writter');
+    }
+
+    public function order(){
+        return $this->hasOne('App\Order', 'id', 'order_id');
+    }
 }

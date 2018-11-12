@@ -8,8 +8,10 @@ use App\Order_status;
 use App\Order_location;
 use App\Order_output;
 use App\Order_proposal;
+use App\Order_feedback;
 use App\User;
 use App\User_feedback;
+
 use Illuminate\Support\Facades\Auth;
 
 class ProviderProjectController extends Controller
@@ -135,4 +137,18 @@ class ProviderProjectController extends Controller
         }
     }
 
+    public function orderFeedbackShow($provider_id){
+        $results =  Order_feedback::with(['client', 'order'])->where('for', $provider_id)->get();
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results,
+            ]);
+        }
+    }
 }
