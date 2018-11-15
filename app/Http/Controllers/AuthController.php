@@ -37,6 +37,8 @@ class AuthController extends Controller
             'rf_role_id' => $request->json('registerType')
         ]);
 
+        // if provider
+        if($request->json('registerType') == '1')
         $resultFeedback = User_feedback::create([
             'user_id' => $resultUser->id,
             'total_rating' => 0,
