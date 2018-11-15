@@ -174,6 +174,11 @@ class AuthController extends Controller
            } 
    }
 
+
+   public function login_admin(Request $request){
+
+   }
+
     public function logout(){
        $accessToken = Auth::user()->token();
             DB::table('oauth_refresh_tokens')
