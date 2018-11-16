@@ -50,7 +50,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('get_rating/{provider_id}', ['uses' => 'ProviderProjectController@getRatingShow']);
         $router->get('order_feedback/{provider_id}', ['uses' => 'ProviderProjectController@orderFeedbackShow']);
     });
-
      /* ADMIN   */  
      $router->group(['prefix' => 'admin'], function () use($router){
     });
