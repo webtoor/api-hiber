@@ -176,7 +176,60 @@ class AuthController extends Controller
 
 
    public function login_admin(Request $request){
+    $this->validate($request,[
+        'email' => 'required',
+        'password' => 'required',
+    ]);    
 
+    global $app; 
+
+    $email = $request->json('email');
+    $password = $request->json('password');
+    $user_role = '3';
+
+    $resultUser = User::where('email', $email)->first();
+        if(!$resultUser){
+            // Email not exist 
+            return response()->json([
+                "error" => "invalid_credentials",
+                "message" => "The user credentials were incorrect"
+               ]);
+        }
+        if(Hash::check($password, $resultUser->password) ) {
+
+            // Email && Password exist + Check user_role
+            if(($user_role) == ($resultUser->role->rf_role_id)){
+
+            $params = [
+                'grant_type'=>'password',
+                'client_id' => '3',
+                'client_secret'=> 'awbQnE3pAZCOaL0ugYU8sOrecq194QiIGvD38jmq',
+                'username'  => $email,
+                'password'  => $password,
+                'scope'     => '*'
+            ];
+            
+            $proxy = Request::create('/oauth/token','post', $params);
+            $response = $app->dispatch($proxy);
+            $json = (array) json_decode($response->getContent());
+            $json['id'] = $resultUser->id;
+            $json['email'] = $resultUser->email;
+            return $response->setContent(json_encode($json)); 
+
+            }else{
+                // != User role
+                return response()->json([
+                 "error" => "invalid_credentials",
+                 "message" => "The user credentials were incorrect"
+                ]);
+            }
+        }else{
+            //Email exist, Password incorrect
+            return response()->json([
+                "error" => "invalid_credentials",
+                "message" => "The user credentials were incorrect"
+               ]);
+        } 
    }
 
     public function logout(){
