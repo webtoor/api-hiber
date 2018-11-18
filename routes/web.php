@@ -52,6 +52,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
     });
      /* ADMIN   */  
      $router->group(['prefix' => 'admin'], function () use($router){
+        $router->get('user_show/{admin_id}', ['uses' => 'AdminController@userShow']);
     });
   });
 

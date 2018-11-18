@@ -6,5 +6,7 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    //
+    public function userShow($admin_id){
+        return 'sadas';
+    }   
 }
