@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\User_role;
+use App\Order;
 
 class AdminController extends Controller
 {
@@ -21,5 +22,19 @@ class AdminController extends Controller
             'success' => false,
         ]);
         }  
-    }   
+    }
+    
+    public function orderShow(){
+       $results = Order::all();
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results
+            ]);
+            }else{
+            return response()->json([
+                'success' => false,
+            ]);
+            } 
+    }
 }
