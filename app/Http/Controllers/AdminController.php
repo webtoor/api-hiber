@@ -25,7 +25,7 @@ class AdminController extends Controller
     }
     
     public function orderShow(){
-       $results = Order::all();
+       $results = Order::with('user_client')->get();
         if($results){
             return response()->json([
                 'success' => true,
