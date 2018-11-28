@@ -54,7 +54,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
      $router->group(['prefix' => 'admin'], function () use($router){
         $router->get('user_show', ['uses' => 'AdminController@userShow']);
         $router->get('order_show', ['uses' => 'AdminController@orderShow']);
-        $router->get('order_show_detail/{id_order}', ['uses' => 'AdminController@orderDetailShow']);
+        $router->get('order_detail_show/{id_order}', ['uses' => 'AdminController@orderDetailShow']);
 
     });
   });

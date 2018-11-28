@@ -37,4 +37,8 @@ class AdminController extends Controller
             ]);
             } 
     }
+
+    public function orderDetailShow(){
+      return "dasdasd";
+     }
 }
