@@ -56,4 +56,19 @@ class AdminController extends Controller
             ]);
             } 
      }
+
+     public function providerShow(){
+        $results = User_role::with('user')->where('rf_role_id', 1)->get();
+
+        if($results){
+         return response()->json([
+             'success' => true,
+             'data' => $results
+         ]);
+         }else{
+         return response()->json([
+             'success' => false,
+         ]);
+         }  
+     }
 }
