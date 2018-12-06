@@ -98,24 +98,40 @@ class ProviderProjectController extends Controller
     }
 
     public function berjalanIkutiShow($provider_id){
-       // $status_id = '2';
+        $status_id = '1';
+       /*   $results = Order_proposal::with(['order' => function ($query) {
+            $query->with('user_client');
+        }])->where('proposal_by', $provider_id)->get();  */
+/* 
+        $results_proposal = Order_proposal::where('proposal_by', $provider_id)->get();
+
+        foreach($results_proposal as $result){
+           $results[] = Order_status::with(['order' => function ($query) {
+            $query->with('user_client');
+        }, 'proposal_by'])->where(['order_id' => $result->order_id, 'status_id' => $status_id])->get()->filter();
+        } */
+
          $results = Order_proposal::with(['order' => function ($query) {
             $query->with('user_client');
-        }])->where('proposal_by', $provider_id)->get(); 
-  
-        //$results_kerja = Order_status::with(['order'])->where('provider_id', $provider_id)->get(); 
+        }, 'order_status' => function ($query) {
+            $query->where('status_id', '1');
+        }])->where('proposal_by', $provider_id)->get();
         
-        if($results){
+        $filtered = $results->filter(function ($value, $key) {
+            return $value['order_status'] != null;
+        });
+        //return $filtered;
+         if($filtered){
             return response()->json([
                 'success' => true,
-                'data' => $results,
+                'data' => $filtered,
             ]);
         }else{
             return response()->json([
                 'success' => false,
-                'data' => $results,
+                'data' => $filtered,
             ]);
-        }
+        } 
     }
 
     public function berjalanKerjaShow($provider_id){

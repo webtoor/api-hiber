@@ -25,4 +25,8 @@ class order_proposal extends Model
     public function order(){
         return $this->hasOne('App\Order', 'id', 'order_id');
     }
+
+    public function order_status(){
+        return $this->hasOne('App\Order_status', 'order_id', 'order_id');
+    }
 }
