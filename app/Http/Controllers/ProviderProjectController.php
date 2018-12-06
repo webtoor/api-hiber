@@ -34,7 +34,7 @@ class ProviderProjectController extends Controller
     public function tawaranShow(){
         $status_id = '1';
         $results = Order::with(['user_client','order_status' => function ($query) use ($status_id) {
-                $query->where('status_id', $status_id); }])->get();  
+                $query->where('status_id', $status_id); }])->orderBy('id', 'desc')->get();  
 
         if($results){
             return response()->json([
