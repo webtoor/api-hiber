@@ -32,7 +32,7 @@ class ProviderProjectController extends Controller
         }
     }
 
-    public function tawaranShow(){
+    public function tawaranShow($provider_id){
         $status_id = '1';
         $results = Order_status::with(['order','user_client'])->where('status_id', $status_id)->orderBy('id', 'desc')->get();  
 
