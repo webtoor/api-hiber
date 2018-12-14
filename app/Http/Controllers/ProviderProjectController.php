@@ -34,11 +34,10 @@ class ProviderProjectController extends Controller
 
     public function tawaranShow($provider_id){
         $status_id = '1';
-         $order_id = Order_proposal::where('proposal_by', $provider_id)->get();
+        $order_id = Order_proposal::where('proposal_by', $provider_id)->get();
         foreach($order_id as $orders){
             $array_order_id[] = $orders['order_id'];
         }
-        //return $array_order_id;
         $results = Order_status::with(['order','user_clients'])->where('status_id',$status_id)->whereNotIn('order_id', $array_order_id )->orderBy('id', 'desc')->get();  
 
         if($results){
