@@ -112,7 +112,7 @@ class ProviderProjectController extends Controller
             $query->with('user_client');
         }, 'order_status' => function ($query) {
             $query->where('status_id', '1');
-        }])->where('proposal_by', $provider_id)->get();
+        }])->where('proposal_by', $provider_id)->orderBy('id', 'desc')->get();
         
         $filtered = $results->filter(function ($value) {
             return $value['order_status'] != null;
@@ -135,7 +135,7 @@ class ProviderProjectController extends Controller
         $status_id = '2';
         $results = Order_status::with(['order' => function ($query) {
             $query->with('user_client');
-        }, 'proposal_by'])->where(['provider_id' => $provider_id, 'status_id' => $status_id])->get(); 
+        }, 'proposal_by'])->where(['provider_id' => $provider_id, 'status_id' => $status_id])->orderBy('id', 'desc')->get();
         
         if($results){
             return response()->json([
@@ -151,7 +151,7 @@ class ProviderProjectController extends Controller
     }
 
     public function orderFeedbackShow($provider_id){
-        $results =  Order_feedback::with(['client', 'order'])->where('for', $provider_id)->get();
+        $results =  Order_feedback::with(['client', 'order'])->where('for', $provider_id)->orderBy('id', 'desc')->get();
         if($results){
             return response()->json([
                 'success' => true,
