@@ -15,14 +15,14 @@ use App\User;
 
 class ProjectController extends Controller
 {
-    public function show($user_id){
+    public function baru_show($user_id){
         
-     $results = Order_status::with(['order', 'user'])->where('changedby_id', $user_id)->whereIn('status_id', ['1', '2'])->orderBy('id', 'desc')->get();
+     $results = Order_status::with(['order', 'user'])->where('changedby_id', $user_id)->whereIn('status_id', ['1'])->orderBy('id', 'desc')->get();
 
         if($results){
             return response()->json([
                 'success' => true,
-                'order' => $results
+                'order_baru' => $results
             ]);
         }else{
             return response()->json([
@@ -30,6 +30,23 @@ class ProjectController extends Controller
             ]);
         }        
     }
+
+    public function berjalan_show($user_id){
+        
+        $results = Order_status::with(['order', 'user'])->where('changedby_id', $user_id)->whereIn('status_id', ['2'])->orderBy('id', 'desc')->get();
+   
+           if($results){
+               return response()->json([
+                   'success' => true,
+                   'order_berjalan' => $results
+               ]);
+           }else{
+               return response()->json([
+                   'success' => false,
+               ]);
+           }        
+    }
+
     public function showPolygon($order_id){
          $result_polygon = Order_location::where('order_id', $order_id)->get();
          $result_output = Order_output::where('order_id', $order_id)->get();

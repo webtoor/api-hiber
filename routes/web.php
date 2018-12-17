@@ -30,7 +30,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
     /* USER  */
     $router->group(['prefix' => 'user'], function () use ($router) {
         $router->post('order', ['uses' => 'OrderController@create']);
-        $router->get('order_show/{user_id}', ['uses' => 'ProjectController@show']);
+        $router->get('order_baru/{user_id}', ['uses' => 'ProjectController@baru_show']);
+        $router->get('order_berjalan/{user_id}', ['uses' => 'ProjectController@berjalan_show']);
         $router->put('order_status/{order_id}', ['uses' => 'ProjectController@updateStatus']);
         $router->get('polygon/{order_id}', ['uses' => 'ProjectController@showPolygon']);
         $router->get('order_proposal/{order_id}/{filter}', ['uses' => 'ProjectController@proposal']);
