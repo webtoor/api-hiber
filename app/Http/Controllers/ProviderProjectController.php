@@ -35,11 +35,16 @@ class ProviderProjectController extends Controller
     public function tawaranShow($provider_id){
         $status_id = '1';
         $order_id = Order_proposal::where('proposal_by', $provider_id)->get();
-        foreach($order_id as $orders){
-            $array_order_id[] = $orders['order_id'];
-        }
-        $results = Order_status::with(['order','user_clients'])->where('status_id',$status_id)->whereNotIn('order_id', $array_order_id )->orderBy('id', 'desc')->get();  
+       
+        if (count($order_id) > 0) {
+            foreach($order_id as $orders){
+                $array_order_id[] = $orders['order_id'];
+            }
+            $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get();
+        }else{
+            $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->get();
 
+        }   
         if($results){
             return response()->json([
                 'success' => true,
