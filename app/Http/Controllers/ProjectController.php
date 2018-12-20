@@ -136,7 +136,19 @@ class ProjectController extends Controller
     }
 
     public function historyProvider($provider_id){
-        return $results = Order_status::with('order', 'output')->where(['provider_id' => $provider_id, 'status_id' => '3'])->get();
+        $results = Order_status::with('order', 'output', 'order_feedback')->where(['provider_id' => $provider_id, 'status_id' => '3'])->get();
+
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results
+            ]);
+        }
     }
     public function getRating($order_id){
         $results = Order_status::with('user')->where('order_id', $order_id)->where('status_id', '3')->first();
