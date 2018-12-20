@@ -135,7 +135,9 @@ class ProjectController extends Controller
         } 
     }
 
-
+    public function historyProject(){
+        
+    }
     public function getRating($order_id){
         $results = Order_status::with('user')->where('order_id', $order_id)->where('status_id', '3')->first();
         if($results){
