@@ -33,7 +33,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('order_baru/{user_id}', ['uses' => 'ProjectController@baru_show']);
         $router->get('order_berjalan/{user_id}', ['uses' => 'ProjectController@berjalan_show']);
         $router->put('order_status/{order_id}', ['uses' => 'ProjectController@updateStatus']);
-        $router->get('history_project/{provider_id}', ['uses' => 'ProjectController@historyProject']);
+        $router->get('history_provider/{provider_id}', ['uses' => 'ProjectController@historyProvider']);
         $router->get('polygon/{order_id}', ['uses' => 'ProjectController@showPolygon']);
         $router->get('order_proposal/{order_id}/{filter}', ['uses' => 'ProjectController@proposal']);
         $router->get('get_rating/{order_id}', ['uses' => 'ProjectController@getrating']);

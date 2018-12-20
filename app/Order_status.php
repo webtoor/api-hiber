@@ -30,4 +30,7 @@ class Order_status extends Model
     public function user_clients(){
         return $this->belongsTo('App\User', 'changedby_id', 'id');
     }
+    public function output(){
+        return $this->belongsTo('App\Order_output', 'order_id', 'order_id');
+    }
 }
