@@ -80,18 +80,26 @@ class ProviderProjectController extends Controller
     public function bidding(Request $request){
         $this->validate($request, [
             'offered_price' => 'required',
-           ]);
-        $order_id = $request->json('order_id');
+           ]); 
+       $order_id = $request->json('order_id');
         $proposal_by = $request->json('proposal_by');
         $offered_price = $request->json('offered_price');
         $comment = $request->json('comment');
-
-       $results = Order_proposal::create([
-            'order_id' => $order_id,
-            'proposal_by' => $proposal_by,
-            'offered_price' => $offered_price,
-            'comment' => $comment,
+        
+        
+       $check = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $proposal_by])->first();
+        if($check){
+            return response()->json([
+                'message' => "double",
+            ]);
+        }else{
+            $results = Order_proposal::create([
+                'order_id' => $order_id,
+                'proposal_by' => $proposal_by,
+                'offered_price' => $offered_price,
+                'comment' => $comment,
         ]);
+        }
 
         if($results){
             return response()->json([

@@ -31,6 +31,10 @@ class Order_status extends Model
         return $this->belongsTo('App\User', 'changedby_id', 'id');
     }
     public function output(){
-        return $this->belongsTo('App\Order_output', 'order_id', 'order_id');
+        return $this->hasMany('App\Order_output', 'order_id', 'order_id');
+    }
+
+    public function order_feedback(){
+        return $this->belongsTo('App\Order_feedback', 'order_id', 'order_id');
     }
 }
