@@ -210,7 +210,7 @@ class ProjectController extends Controller
 
 
     public function history ($user_id){
-        $results = Order_status::with('order', 'user')->where('changedby_id', $user_id)->whereIn('status_id', ['3', '4'])->orderBy('id', 'desc')->get();
+        $results = Order_status::with('order', 'user')->where('changedby_id', $user_id)->whereIn('status_id', ['3', '4'])->orderBy('update_at', 'desc')->get();
          
          if($results){
              return response()->json([
