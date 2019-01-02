@@ -32,19 +32,41 @@ class ProviderProjectController extends Controller
         }
     }
 
-    public function tawaranShow($provider_id){
+    public function tawaranShow($provider_id, $projecttype){
         $status_id = '1';
         $order_id = Order_proposal::where('proposal_by', $provider_id)->get();
-       
+        $filterProject = $projecttype;
         if (count($order_id) > 0) {
             foreach($order_id as $orders){
                 $array_order_id[] = $orders['order_id'];
             }
-            $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get();
+            if($filterProject != '0'){
+                $collection = Order_status::with(['order'  => function ($query) use ($filterProject) {
+                    $query->where('projecttype', $filterProject);
+                },'user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get();
+                $results = $collection->filter(function ($value) {
+                    return $value['order'] != null;
+                })->values();
+            }else{
+                //Default
+                $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get();
+            }
         }else{
-            $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->get();
+            if($filterProject != '0'){
+                $collection = Order_status::with(['order'  => function ($query) use ($filterProject) {
+                    $query->where('projecttype', $filterProject);
+                },'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->get();
+                $results = $collection->filter(function ($value) {
+                    return $value['order'] != null;
+                })->values();
+            }else{
+                //Default
+                $results = Order_status::with(['order' ,'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->get();
+            }
 
         }   
+
+
         if($results){
             return response()->json([
                 'success' => true,
@@ -159,7 +181,7 @@ class ProviderProjectController extends Controller
     }
 
     public function orderFeedbackShow($provider_id){
-        $results =  Order_feedback::with(['client', 'order'])->where('for', $provider_id)->orderBy('id', 'desc')->get();
+        $results =  Order_feedback::with(['client', 'order'])->where('for', $provider_id)->orderBy('updated_at', 'desc')->get();
         if($results){
             return response()->json([
                 'success' => true,
