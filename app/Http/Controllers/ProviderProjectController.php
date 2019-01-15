@@ -48,7 +48,7 @@ class ProviderProjectController extends Controller
                     return $value['order'] != null;
                 })->values();
             }else{
-                //Default
+                //Default Show
                 $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get();
             }
         }else{
@@ -60,7 +60,7 @@ class ProviderProjectController extends Controller
                     return $value['order'] != null;
                 })->values();
             }else{
-                //Default
+                //Default Show
                 $results = Order_status::with(['order' ,'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->get();
             }
 
