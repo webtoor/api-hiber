@@ -23,6 +23,8 @@ class AuthController extends Controller
             'password' => 'required|string|min:5|confirmed',
             'registerType' => 'required|string'
         ]);
+
+        //default measurement
         if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
             $measurement_id = '1';
         }else{
