@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\User_role;
 use App\User_feedback;
+use App\Device_token;
 
 class AuthController extends Controller
 {
