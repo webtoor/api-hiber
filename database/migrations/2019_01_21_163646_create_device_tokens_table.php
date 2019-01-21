@@ -15,7 +15,9 @@ class CreateDeviceTokensTable extends Migration
     {
         Schema::create('device_tokens', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->integer('user_id')->unsigned();
+            $table->string('device_token');
+            $table->foreign('user_id')->references('id')->on('rf_users')->onDelete('cascade');
         });
     }
 
