@@ -168,7 +168,8 @@ class AuthController extends Controller
 
               $resultDToken = Device_token::create([
                    'user_id' => $resultUser->id,
-                   'device_token' => $device_token
+                   'role_id' => $user_role,
+                   'token' => $device_token
                ]);
 
                return $response->setContent(json_encode($json)); 

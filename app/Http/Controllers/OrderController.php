@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Order;
 use App\Order_output;
@@ -85,7 +86,47 @@ class OrderController extends Controller
             'status_id' => $status_id,
             'changedby_id' => $request->json('createdby_id')
         ]);
+        $client = new \GuzzleHttp\Client();
+      
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $headers = [
+            'Content-Type' =>'application/json',
+            'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
 
+        ];
+        $notification = [
+            "title" => "Proyek Tawaran",
+            "body" => "Ada Tawaran Baru",
+            "sound" => "default",
+            "click_action" => "FCM_PLUGIN_ACTIVITY",
+            "icon" =>"fcm_push_icon"
+        ];
+
+        $data = [
+            "title" => "Proyek Tawaran",
+            "body" => "Ada Tawaran Baru",
+            "action" => "tawaran",
+            "forceStart" => "1"
+        ];
+        $params = [
+            'notification'=> $notification,
+            'data' => $data,
+            "to" => "/topics/tawaran",
+            "priority" => "high"
+        ]; 
+      
+    $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+        'headers' => ['Content-Type' => 'application/json', 
+        'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+    ],
+        'body' => json_encode([
+            'notification'=> $notification,
+            'data' => $data,
+            "to" => "/topics/tawaran",
+            "priority" => "high"
+        ])
+    ]);
+    $result_subscribe =  $response->getBody();
         if($result_order && $result_order_output && $result_order_polygon){
             return response()->json([
                 'success' => true

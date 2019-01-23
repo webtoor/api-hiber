@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use App\Order;
 use App\Order_status;
 use App\Order_location;
@@ -237,5 +238,49 @@ class ProjectController extends Controller
                 'success' => false,
             ]);
         } 
+    }
+
+    public function testFCM(Request $request){
+        $client = new \GuzzleHttp\Client();
+      
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $headers = [
+            'Content-Type' =>'application/json',
+            'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+
+        ];
+        $notification = [
+            "title" => "Notification title",
+            "body" => "Notification body",
+            "sound" => "default",
+            "click_action" => "FCM_PLUGIN_ACTIVITY",
+            "icon" =>"fcm_push_icon"
+        ];
+
+        $data = [
+            "title" => "actual data title",
+            "body" => "actual data body",
+            "action" => "tawaran",
+            "forceStart" => "1"
+        ];
+        $params = [
+            'notification'=> $notification,
+            'data' => $data,
+            "to" => "/topics/tawaran",
+            "priority" => "high"
+        ]; 
+      
+    $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+        'headers' => ['Content-Type' => 'application/json', 
+        'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+    ],
+        'body' => json_encode([
+            'notification'=> $notification,
+            'data' => $data,
+            "to" => "/topics/tawaran",
+            "priority" => "high"
+        ])
+    ]);
+    return $response->getBody();
     }
 }
