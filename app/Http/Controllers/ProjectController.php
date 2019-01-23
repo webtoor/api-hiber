@@ -95,15 +95,9 @@ class ProjectController extends Controller
                         $data = [
                             "title" => "Proyek Tawaran",
                             "body" => "Ada Tawaran Baru",
-                            "action" => "tawaran",
+                            "action" => "bekerja",
                             "forceStart" => "1"
                         ];
-                        $params = [
-                            'notification'=> $notification,
-                            'data' => $data,
-                            "to" => "/topics/tawaran",
-                            "priority" => "high"
-                        ]; 
                     
                     $response = $client->post('https://fcm.googleapis.com/fcm/send', [
                         'headers' => ['Content-Type' => 'application/json', 
