@@ -168,7 +168,6 @@ class AuthController extends Controller
 
               $resultDToken = Device_token::create([
                    'user_id' => $resultUser->id,
-                   'role_id' => $user_role,
                    'token' => $device_token
                ]);
 
@@ -259,7 +258,9 @@ class AuthController extends Controller
                 ->delete();
                 $accessToken->revoke();
                 $accessToken->delete();
-
+            DB::table('device_tokens')
+                ->where('user_id', $accessToken->user_id)
+                ->delete();
         return response()->json([
             'success' => true,
             'message' => 'Berhasil logout']);
