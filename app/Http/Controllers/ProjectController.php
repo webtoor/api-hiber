@@ -12,6 +12,8 @@ use App\Order_proposal;
 use App\Order_feedback;
 use App\User_feedback;
 use App\User;
+use App\Device_token;
+
 
 
 class ProjectController extends Controller
@@ -69,10 +71,56 @@ class ProjectController extends Controller
     public function updateStatus (Request $request, $order_id){
         $status = $request->json('status');
         $provider_id = $request->json('provider_id');
-       
+        $results_token = Device_token::where('user_id', $provider_id)->OrderBy('id', 'desc')->first();
         if($provider_id){
-             // GUNAKAN && SELESAI
-            $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+             // GUNAKAN 
+             if($status == "2"){
+                $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+                $client = new \GuzzleHttp\Client();
+      
+                        $url = 'https://fcm.googleapis.com/fcm/send';
+                        $headers = [
+                            'Content-Type' =>'application/json',
+                            'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+
+                        ];
+                        $notification = [
+                            "title" => "Proyek Berjalan",
+                            "body" => "Ada yang menggunakan jasa anda",
+                            "sound" => "default",
+                            "click_action" => "FCM_PLUGIN_ACTIVITY",
+                            "icon" =>"fcm_push_icon"
+                        ];
+
+                        $data = [
+                            "title" => "Proyek Tawaran",
+                            "body" => "Ada Tawaran Baru",
+                            "action" => "tawaran",
+                            "forceStart" => "1"
+                        ];
+                        $params = [
+                            'notification'=> $notification,
+                            'data' => $data,
+                            "to" => "/topics/tawaran",
+                            "priority" => "high"
+                        ]; 
+                    
+                    $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+                        'headers' => ['Content-Type' => 'application/json', 
+                        'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+                    ],
+                        'body' => json_encode([
+                            'notification'=> $notification,
+                            'data' => $data,
+                            "to" => $results_token->token,
+                            "priority" => "high"
+                        ])
+                    ]);
+                    $result_subscribe =  $response->getBody();
+             }elseif($status == "3"){
+               // SELESAI
+                $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+             }
         }else{
             // CANCEL
             $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status]);
