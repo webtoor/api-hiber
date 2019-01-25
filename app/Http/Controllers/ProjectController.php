@@ -93,8 +93,8 @@ class ProjectController extends Controller
                         ];
 
                         $data = [
-                            "title" => "Proyek Tawaran",
-                            "body" => "Ada Tawaran Baru",
+                            "title" => "Proyek Berjalan",
+                            "body" => "Ada yang menggunakan Jasa anda",
                             "action" => "bekerja",
                             "forceStart" => "1"
                         ];
