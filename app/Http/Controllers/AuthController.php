@@ -26,14 +26,13 @@ class AuthController extends Controller
         ]);
 
         //default measurement
-        if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
+      /*   if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
             $measurement_id = '1';
         }else{
             $measurement_id = null;
-        }
+        } */
             // Create User
         $resultUser = User::create([
-            'measurement_id' => $measurement_id,
             'username' => $request->json('username'),
             'email' => $request->json('email'),
             'phonenumber' => $request->json('phonenumber'),
