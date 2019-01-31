@@ -20,7 +20,6 @@ class CreateOrdersTable extends Migration
             $table->date('dtprojectstart');
             $table->date('dtprojectend');
             $table->integer('projecttype')->unsigned();
-            $table->integer('orderhourduration');
             $table->text('comment');
             $table->timestamps();
             $table->foreign('createdby')->references('id')->on('rf_users')->onDelete('cascade');

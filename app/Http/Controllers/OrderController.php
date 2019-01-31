@@ -46,9 +46,9 @@ class OrderController extends Controller
             $subject = $request->json('subject');
         }
         // Generated orderhours
-        $mulai = Carbon::createFromFormat('Y-m-d', $request->json('mulai'));
+       /*  $mulai = Carbon::createFromFormat('Y-m-d', $request->json('mulai'));
         $akhir = Carbon::createFromFormat('Y-m-d', $request->json('akhir'));
-        $orderhourduration = $mulai->diffInHours($akhir);
+        $orderhourduration = $mulai->diffInHours($akhir); */
 
 
         // Store order
@@ -58,7 +58,6 @@ class OrderController extends Controller
             'dtprojectstart' => $mulai,
             'dtprojectend' => $akhir,
             'projecttype' => $request->json('kegunaan'),
-            'orderhourduration' => $orderhourduration,
             'comment' => $request->json('comment')
         ]);  
 
