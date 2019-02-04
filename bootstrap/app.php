@@ -24,7 +24,7 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
- $app->withFacades();
+ //$app->withFacades();
 
  $app->withEloquent();
 
@@ -56,7 +56,8 @@ $app->configure('auth');
 
 $app->configure('cors');
 
-
+$app->configure('services');
+$app->configure('mail');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -103,6 +104,10 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
 // CORS
 $app->register(Barryvdh\Cors\ServiceProvider::class);
+
+//MAIL
+$app->register(\Illuminate\Mail\MailServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
