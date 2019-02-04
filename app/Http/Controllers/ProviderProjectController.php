@@ -194,4 +194,8 @@ class ProviderProjectController extends Controller
             ]);
         }
     }
+
+    public function exportLatLong(Request $request){
+        
+    }
 }
