@@ -19,6 +19,8 @@
 $router->post('login_user', ['uses' => 'AuthController@login_user']);
 $router->post('login_provider', ['uses' => 'AuthController@login_provider']);
 $router->post('login_admin', ['uses' => 'AuthController@login_admin']);
+$router->get('check', ['uses' => 'AuthController@check']);
+
 /* $router->post('fcmtest', ['uses' => 'ProjectController@testFCM']); */
 
 //$router->get('timezone', ['uses' => 'OrderController@timezone']);

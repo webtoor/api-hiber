@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use App\User;
 use App\User_role;
 use App\User_feedback;
@@ -263,6 +264,21 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Berhasil logout']);
+    }
+
+    public function check() {
+
+      
+            $user = new \stdClass();
+            $user->email = 'webtoor@gmail.com';
+            $user->name = 'webtoor';
+            Mail::raw('test', function ($mail) use ($user) {
+                $mail->to($user->email, $user->name)->subject('Test Subject');
+            });
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil kirim email!']);
+       
     }
 
 }
