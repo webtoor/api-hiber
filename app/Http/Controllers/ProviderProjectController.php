@@ -195,7 +195,8 @@ class ProviderProjectController extends Controller
         }
     }
 
-    public function exportLatLong(Request $request){
-        return "Ok";
+    public function exportLatLong($order_id){
+        $results = Order_location::where('order_id', $order_id)->orderBy('id', 'desc')->get();
+        return view('test', ['koordinat' => $results]);
     }
 }

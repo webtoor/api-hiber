@@ -14,16 +14,22 @@
     return $router->app->version();
 }); 
  
+$router->get('/kml', function () use ($router) {
+    return view('test');
 
+}); 
+ 
 
 $router->post('login_user', ['uses' => 'AuthController@login_user']);
 $router->post('login_provider', ['uses' => 'AuthController@login_provider']);
 $router->post('login_admin', ['uses' => 'AuthController@login_admin']);
 $router->get('check', ['uses' => 'AuthController@check']);
+$router->get('export_latlng/{order_id}', ['uses' => 'ProviderProjectController@exportLatLong']);
+
 
 /* $router->post('fcmtest', ['uses' => 'ProjectController@testFCM']); */
 
-//$router->get('timezone', ['uses' => 'OrderController@timezone']);
+/* $router->get('timezone', ['uses' => 'OrderController@timezone']); */
 
 $router->post('register', ['uses' => 'AuthController@register']);
 
@@ -45,6 +51,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('profil_provider/{user_id}', ['uses' => 'ProjectController@profilProvider']);
     });
      
+    
     /* SERVICE PROVIDER   */  
     $router->group(['prefix' => 'provider'], function () use($router){
         $router->get('tawaran_show/{provider_id}/{projecttype}', ['uses' => 'ProviderProjectController@tawaranShow']);
@@ -54,8 +61,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->get('berjalan_kerja_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanKerjaShow']);
         $router->get('get_rating/{provider_id}', ['uses' => 'ProviderProjectController@getRatingShow']);
         $router->get('order_feedback/{provider_id}', ['uses' => 'ProviderProjectController@orderFeedbackShow']);
-        $router->post('export/{order_id}', ['uses' => 'ProviderProjectController@exportLatLong']);
-    });
+/*         $router->get('export_latlng/{order_id}', ['uses' => 'ProviderProjectController@exportLatLong']);
+ */    });
      /* ADMIN   */  
      $router->group(['prefix' => 'admin'], function () use($router){
         $router->get('user_show', ['uses' => 'AdminController@userShow']);
