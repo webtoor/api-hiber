@@ -27,12 +27,12 @@ $docNode = $parNode->appendChild($dnode);
   $placeNode = $placeNode->appendChild($lineNode);
 
   // Creates a extrude element.
-  $exnode = $dom->createElement('extrude', '1');
-  $lineNode->appendChild($exnode);
+  //$exnode = $dom->createElement('extrude', '1');
+ // $lineNode->appendChild($exnode);
 
   // Creates a altitudeMode element.
-  $almodenode =$dom->createElement('altitudeMode','relativeToGround');
-  $lineNode->appendChild($almodenode);
+  //$almodenode =$dom->createElement('altitudeMode','relativeToGround');
+  //$lineNode->appendChild($almodenode);
 
   // Creates a outerBoundaryIs element.
   $outerboundnode = $dom->createElement('outerBoundaryIs');
@@ -44,9 +44,13 @@ $docNode = $parNode->appendChild($dnode);
 
   
   // Creates a coordinates element and gives it the value of the lng and lat columns from the results.
-foreach ($koordinat as $data) {
-  $coorStr[] = $data['longitude'] . ','  . $data['latitude'];
-} 
+  foreach ($koordinat as $data) {
+    $coorStr[] = $data['longitude'] . ','  . $data['latitude'];
+  } 
+    if(count($koordinat) <= 3 ){
+    Array_push($coorStr, $coorStr[0]);
+    //var_dump($coorStr);
+  }
  
 $coorNode = $dom->createElement('coordinates',implode(" ",$coorStr));
 $placeNode = $placeNode->appendChild($coorNode);
@@ -55,4 +59,6 @@ $kmlOutput = $dom->saveXML();
 header('Content-type: application/vnd.google-earth.kml+xml');
 header('Content-Disposition: attachment; filename="location.kml"');
 echo $kmlOutput; 
+
+
 ?>
