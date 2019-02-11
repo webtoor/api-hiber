@@ -22,17 +22,25 @@ $docNode = $parNode->appendChild($dnode);
   $nameNode = $dom->createElement('name', htmlentities('HIBER'));
   $placeNode->appendChild($nameNode);
 
-  //Creates a Polygon element.
-  $polygonNode = $dom->createElement('Polygon', htmlentities(''));
-  $placeNode->appendChild($polygonNode);
+  // Creates a Polygon element.
+  $lineNode = $dom->createElement('Polygon');
+  $placeNode = $placeNode->appendChild($lineNode);
+
+  // Creates a extrude element.
+  $exnode = $dom->createElement('extrude', '1');
+  $lineNode->appendChild($exnode);
+
+  // Creates a altitudeMode element.
+  $almodenode =$dom->createElement('altitudeMode','relativeToGround');
+  $lineNode->appendChild($almodenode);
 
   // Creates a outerBoundaryIs element.
-  $outerBoundNode = $dom->createElement('outerBoundaryIs', htmlentities(''));
-  $placeNode->appendChild($outerBoundNode);
- 
-   // Creates a linearRingNode element.
-   $linearRingNode = $dom->createElement('LinearRing');
-   $placeNode->appendChild($linearRingNode);
+  $outerboundnode = $dom->createElement('outerBoundaryIs');
+  $placeNode = $placeNode->appendChild($outerboundnode);
+
+  // Creates a LinearRing element.
+  $linearnode =$dom->createElement('LinearRing');
+  $placeNode = $placeNode->appendChild($linearnode);
 
   
   // Creates a coordinates element and gives it the value of the lng and lat columns from the results.
@@ -40,8 +48,8 @@ foreach ($koordinat as $data) {
   $coorStr[] = $data['longitude'] . ','  . $data['latitude'];
 } 
  
-$coorNode = $dom->createElement('coordinates', implode(" ", $coorStr));
-$linearRingNode->appendChild($coorNode);
+$coorNode = $dom->createElement('coordinates',implode(" ",$coorStr));
+$placeNode = $placeNode->appendChild($coorNode);
 
 $kmlOutput = $dom->saveXML();
 header('Content-type: application/vnd.google-earth.kml+xml');
