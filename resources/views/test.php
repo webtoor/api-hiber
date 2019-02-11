@@ -37,7 +37,7 @@ $docNode = $parNode->appendChild($dnode);
   
   // Creates a coordinates element and gives it the value of the lng and lat columns from the results.
 foreach ($koordinat as $data) {
-  $coorStr[] = $data['latitude'] . ','  . $data['longitude'];
+  $coorStr[] = $data['longitude'] . ','  . $data['latitude'];
 } 
  
 $coorNode = $dom->createElement('coordinates', implode(" ", $coorStr));
