@@ -198,11 +198,20 @@ class ProviderProjectController extends Controller
 
 
     public function sendEmail(Request $request){
+        $order_id = $request->json('order_id');
+        $email = $request->json('email');
+        $results = User::where('email', $email)->first();        
         $user = new \stdClass();
-        $user->email = 'webtoor@gmail.com';
-        $user->name = 'webtoor';
-        Mail::raw('test', function ($mail) use ($user) {
+        $user->email = $email;
+        $user->name = $results['username'];
+       /*  Mail::raw("Test",function ($mail) use ($user) {
                 $mail->to($user->email, $user->name)->subject('Test Subject');
+                $mail->from('fmunshi@eidaramata.com','Fityan Ali');
+        }); */
+
+        Mail::send(["html" => "emailExport"], ['order_id' => $order_id, 'email' => $email, 'username' => $user->name ], function($mail) use ($user){
+            $mail->to($user->email, $user->name)->subject('Test Subject');
+            $mail->from('fmunshi@eidaramata.com','Fityan Ali');
         });
         return response()->json([
                 'success' => true,
