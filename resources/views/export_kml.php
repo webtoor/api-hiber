@@ -57,7 +57,7 @@ $placeNode = $placeNode->appendChild($coorNode);
 
 $kmlOutput = $dom->saveXML();
 header('Content-type: application/vnd.google-earth.kml+xml');
-header('Content-Disposition: attachment; filename="location.kml"');
+header('Content-Disposition: attachment; filename="'.$name_order.'.kml"');
 echo $kmlOutput; 
 
 

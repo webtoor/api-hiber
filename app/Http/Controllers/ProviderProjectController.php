@@ -221,6 +221,8 @@ class ProviderProjectController extends Controller
 
     public function exportLatLong($order_id){
         $results = Order_location::where('order_id', $order_id)->get();
-        return view('test', ['koordinat' => $results]);
+        $result_order = Order::where('id', $order_id)->first();
+        $name_order = $result_order['subject'];
+        return view('export_kml', ['koordinat' => $results, 'name_order' => $name_order ]);
     }
 }

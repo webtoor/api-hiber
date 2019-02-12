@@ -14,11 +14,6 @@
     return $router->app->version();
 }); 
  
-$router->get('/kml', function () use ($router) {
-    return view('test');
-
-}); 
- 
 
 $router->post('login_user', ['uses' => 'AuthController@login_user']);
 $router->post('login_provider', ['uses' => 'AuthController@login_provider']);
