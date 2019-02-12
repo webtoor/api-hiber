@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 use App\Order;
 use App\Order_status;
 use App\Order_location;
@@ -193,6 +194,20 @@ class ProviderProjectController extends Controller
                 'data' => $results,
             ]);
         }
+    }
+
+
+    public function sendEmail(Request $request){
+        $user = new \stdClass();
+        $user->email = 'webtoor@gmail.com';
+        $user->name = 'webtoor';
+        Mail::raw('test', function ($mail) use ($user) {
+                $mail->to($user->email, $user->name)->subject('Test Subject');
+        });
+        return response()->json([
+                'success' => true,
+                'message' => 'Berhasil kirim email!'
+        ]);
     }
 
     public function exportLatLong($order_id){
