@@ -16,7 +16,7 @@ use App\Device_token;
 class AuthController extends Controller
 {
     public function register(Request $request){
-        /* $result = $request->json()->all(); */
+      //$result = $request->json()->all(); 
             // Validasi
        $this->validate($request, [
             'username' => 'required|string',
@@ -24,7 +24,21 @@ class AuthController extends Controller
             'phonenumber' => 'required|numeric|min:10',
             'password' => 'required|string|min:5|confirmed',
             'registerType' => 'required|string'
-        ]);
+        ]);  
+        /*  $role_id = $request->json('registerType');
+        $messages[] = 'The email has already been taken';
+        if(($request->json('email')) && ($request->json('registerType')) ) {
+            $validations =  User::with(['role' => function ($query) use ($role_id) {
+                $query->where('rf_role_id', $role_id );
+            }])->where('email', $request->json('email'))->first();
+               if($validations->role != ''){
+                  return response()->json([
+                    'message' => 'The given data was invalid',
+                    'error' => response()->json(['email' => $messages]),
+                ], 400);
+               }
+         
+        }    */
 
         //default measurement
       /*   if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
@@ -130,7 +144,6 @@ class AuthController extends Controller
            'email' => 'required',
            'password' => 'required',
        ]);    
-
        global $app; 
 
        $email = $request->json('email');
@@ -149,7 +162,7 @@ class AuthController extends Controller
            if(Hash::check($password, $resultUser->password) ) {
 
                // Email && Password exist + Check user_role
-               if(($user_role) == ($resultUser->role->rf_role_id)){
+               if(($user_role) == ($resultUser->role_provider->rf_role_id)){
 
                $params = [
                    'grant_type'=>'password',

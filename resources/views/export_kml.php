@@ -47,7 +47,8 @@ $docNode = $parNode->appendChild($dnode);
   foreach ($koordinat as $data) {
     $coorStr[] = $data['longitude'] . ','  . $data['latitude'];
   } 
-    if(count($koordinat) <= 3 ){
+  $numb = count($koordinat);
+    if($numb % 2 != 0 ){
     Array_push($coorStr, $coorStr[0]);
     //var_dump($coorStr);
   }

@@ -10,7 +10,7 @@
 	Hello, <?php echo $username ?>
 	<br>
 	<br>
-        <a href="http://localhost:8000/export_latlng/<?php echo $order_id ?>">Klik disini untuk download KML</a>
+        <a href="http://hiber.eidaramata.com/public/export_latlng/<?php echo $order_id ?>">Klik disini untuk download KML</a>
 	<br>
 	<br>
 	Terima Kasih
