@@ -53,6 +53,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function user_feedback(){
         return $this->hasOne('App\User_feedback', 'user_id');
     }
+    public function role_user(){
+        return $this->hasOne('App\User_role', 'user_id')->where('rf_role_id' ,'2');
+    }
     public function role_provider(){
         return $this->hasOne('App\User_role', 'user_id')->where('rf_role_id' ,'1');
     }

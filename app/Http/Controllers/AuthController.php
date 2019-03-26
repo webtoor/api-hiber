@@ -40,12 +40,12 @@ class AuthController extends Controller
          
         }    */
 
-        //default measurement
-      /*   if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
-            $measurement_id = '1';
+       //default measurement
+       if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
+        $measurement_id = '1';
         }else{
-            $measurement_id = null;
-        } */
+        $measurement_id = null;
+        }
             // Create User
         $resultUser = User::create([
             'username' => $request->json('username'),
@@ -104,7 +104,7 @@ class AuthController extends Controller
             if(Hash::check($password, $resultUser->password) ) {
 
                 // Email && Password exist + Check user_role
-                if(($user_role) == ($resultUser->role->rf_role_id)){
+                if(($user_role) == ($resultUser->role_user->rf_role_id)){
 
                 $params = [
                     'grant_type'=>'password',
