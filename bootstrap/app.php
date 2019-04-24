@@ -42,14 +42,12 @@ $app = new Laravel\Lumen\Application(
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class,
-    \Barryvdh\Cors\HandleCors::class
+    App\Exceptions\Handler::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class,
-    \Barryvdh\Cors\HandleCors::class
+    App\Console\Kernel::class
 );
 
 $app->configure('auth');
@@ -73,7 +71,7 @@ $app->configure('mail');
 //    App\Http\Middleware\ExampleMiddleware::class
 // ]);
 $app->middleware([
-    App\Http\Middleware\CorsMiddleware::class
+    \Barryvdh\Cors\HandleCors::class,
 ]);
 
  $app->routeMiddleware([
