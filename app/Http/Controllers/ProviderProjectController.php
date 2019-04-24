@@ -104,36 +104,36 @@ class ProviderProjectController extends Controller
         $this->validate($request, [
             'offered_price' => 'required',
            ]); 
-       $order_id = $request->json('order_id');
+        $order_id = $request->json('order_id');
         $proposal_by = $request->json('proposal_by');
         $offered_price = $request->json('offered_price');
         $comment = $request->json('comment');
         
-        
-       $check = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $proposal_by])->first();
-        if($check){
-            return response()->json([
-                'message' => "double",
-            ]);
-        }else{
-            $results = Order_proposal::create([
+     
+            $checks = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $proposal_by])->get();
+            if (count($checks) < 1) {
+                //Problem here
+                $hasil = Order_proposal::create([
                 'order_id' => $order_id,
                 'proposal_by' => $proposal_by,
                 'offered_price' => $offered_price,
                 'comment' => $comment,
-        ]);
-        }
-
-        if($results){
+            ]);
             return response()->json([
                 'success' => true,
-                'data' => $results
+                'data' => $hasil
             ]);
-            return response()->json([
-                'success' => false,
-                'data' => $results
-            ]);
-        }
+            } elseif ($checks != null) {
+                $hasil = null;
+                return response()->json([
+                    'success' => true,
+                    'message' => "double",
+                    'data' => $hasil
+                ]);
+            } 
+
+          
+            
 
     }
 

@@ -73,7 +73,7 @@ $app->configure('mail');
 //    App\Http\Middleware\ExampleMiddleware::class
 // ]);
 $app->middleware([
-    \Barryvdh\Cors\HandleCors::class,
+    App\Http\Middleware\CorsMiddleware::class
 ]);
 
  $app->routeMiddleware([
