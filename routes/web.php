@@ -53,6 +53,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->post('bidding', ['uses' => 'ProviderProjectController@bidding']);
         $router->get('berjalan_ikuti_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanIkutiShow']);
         $router->post('cancel_bid', ['uses' => 'ProviderProjectController@cancelBid']);
+        $router->post('edit_penawaran', ['uses' => 'ProviderProjectController@editPenawaran']);
+
         $router->get('berjalan_kerja_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanKerjaShow']);
         $router->get('get_rating/{provider_id}', ['uses' => 'ProviderProjectController@getRatingShow']);
         $router->get('order_feedback/{provider_id}', ['uses' => 'ProviderProjectController@orderFeedbackShow']);
