@@ -162,6 +162,24 @@ class ProviderProjectController extends Controller
         } 
     }
 
+    public function cancelBid(){
+        $order_id = $request->json('order_id');
+        $provider_id = $request->json('provider_id');
+
+        $results = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $provider_id])->delete();
+
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results,
+            ]);
+        }
+    }
     public function berjalanKerjaShow($provider_id){
         $status_id = '2';
         $results = Order_status::with(['order' => function ($query) {
