@@ -163,10 +163,8 @@ class ProviderProjectController extends Controller
     }
 
     public function cancelBid(){
-        $order_id = $request->json('order_id');
-        $provider_id = $request->json('provider_id');
-
-        $results = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $provider_id])->delete();
+        $id = $request->json('id');
+        $results = Order_proposal::where('id', $id)->delete();
 
         if($results){
             return response()->json([
@@ -179,6 +177,25 @@ class ProviderProjectController extends Controller
                 'data' => $results,
             ]);
         }
+    }
+
+    public function editPenawaran(){
+        $id = $request->json('id');
+        $offered_price = $request->json('offered_price');
+
+        $results = Order_penawaran::where('id', $id)->update(['offered_price'=> $offered_price]);
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results,
+            ]);
+        }
+
     }
     public function berjalanKerjaShow($provider_id){
         $status_id = '2';
