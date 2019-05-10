@@ -143,7 +143,7 @@ class ProviderProjectController extends Controller
             $query->with('user_client');
         }, 'order_status' => function ($query) {
             $query->where('status_id', '1');
-        }])->where('proposal_by', $provider_id)->orderBy('id', 'desc')->get();
+        }])->where('order_proposal_by', $provider_id)->orderBy('id', 'desc')->get();
         
         $filtered = $results->filter(function ($value) {
             return $value['order_status'] != null;
