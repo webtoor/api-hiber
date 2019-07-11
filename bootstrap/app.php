@@ -42,21 +42,20 @@ $app = new Laravel\Lumen\Application(
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class,
-    \Barryvdh\Cors\HandleCors::class
+    App\Exceptions\Handler::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class,
-    \Barryvdh\Cors\HandleCors::class
+    App\Console\Kernel::class
 );
 
 $app->configure('auth');
 
 $app->configure('cors');
 
-
+$app->configure('services');
+$app->configure('mail');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -103,6 +102,10 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
 // CORS
 $app->register(Barryvdh\Cors\ServiceProvider::class);
+
+//MAIL
+$app->register(\Illuminate\Mail\MailServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Order;
 use App\Order_output;
@@ -15,7 +16,6 @@ class OrderController extends Controller
         
          // Validate
          $this->validate($request, [
-            'subject'  => 'required|string',
             'mulai' => 'required|string',
             'akhir' => 'required|string',
             'kegunaan' => 'required|string',
@@ -35,27 +35,29 @@ class OrderController extends Controller
             }
         }
        
-        // Generated subject
-       /*  $carbon = Carbon::now();
-        $subject =  $carbon->format('d-M-Y H:i A'); */
+       
       // date("j M, Y", strtotime($b));
 
-
-
+        if ($request->json('subject') == '') {
+            // Generated subject
+            $carbon = Carbon::now();
+            $subject =  $carbon->format('d-M-Y H:i A');
+        }else{
+            $subject = $request->json('subject');
+        }
         // Generated orderhours
-        $mulai = Carbon::createFromFormat('Y-m-d', $request->json('mulai'));
+       /*  $mulai = Carbon::createFromFormat('Y-m-d', $request->json('mulai'));
         $akhir = Carbon::createFromFormat('Y-m-d', $request->json('akhir'));
-        $orderhourduration = $mulai->diffInHours($akhir);
+        $orderhourduration = $mulai->diffInHours($akhir); */
 
 
         // Store order
         $result_order = Order::create([
-            'subject' =>$request->json('subject'),
+            'subject' => $subject,
             'createdby' => $request->json('createdby_id'),
             'dtprojectstart' => $mulai,
             'dtprojectend' => $akhir,
             'projecttype' => $request->json('kegunaan'),
-            'orderhourduration' => $orderhourduration,
             'comment' => $request->json('comment')
         ]);  
 
@@ -83,7 +85,47 @@ class OrderController extends Controller
             'status_id' => $status_id,
             'changedby_id' => $request->json('createdby_id')
         ]);
+        $client = new \GuzzleHttp\Client();
+      
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $headers = [
+            'Content-Type' =>'application/json',
+            'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
 
+        ];
+        $notification = [
+            "title" => "Proyek Tawaran",
+            "body" => "Ada Tawaran Baru",
+            "sound" => "default",
+            "click_action" => "FCM_PLUGIN_ACTIVITY",
+            "icon" =>"fcm_push_icon"
+        ];
+
+        $data = [
+            "title" => "Proyek Tawaran",
+            "body" => "Ada Tawaran Baru",
+            "action" => "tawaran",
+            "forceStart" => "1"
+        ];
+        $params = [
+            'notification'=> $notification,
+            'data' => $data,
+            "to" => "/topics/tawaran",
+            "priority" => "high"
+        ]; 
+      
+    $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+        'headers' => ['Content-Type' => 'application/json', 
+        'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+    ],
+        'body' => json_encode([
+            'notification'=> $notification,
+            'data' => $data,
+            "to" => "/topics/tawaran",
+            "priority" => "high"
+        ])
+    ]);
+    $result_subscribe =  $response->getBody();
         if($result_order && $result_order_output && $result_order_polygon){
             return response()->json([
                 'success' => true

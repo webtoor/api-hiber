@@ -21,6 +21,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
+        'measurement_id',
         'username',
         'email',
         'password',
@@ -37,7 +38,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'password', 'updated_at'
+         'updated_at'
     ];
 
     public function role(){
@@ -51,5 +52,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
     public function user_feedback(){
         return $this->hasOne('App\User_feedback', 'user_id');
+    }
+    public function role_user(){
+        return $this->hasOne('App\User_role', 'user_id')->where('rf_role_id' ,'2');
+    }
+    public function role_provider(){
+        return $this->hasOne('App\User_role', 'user_id')->where('rf_role_id' ,'1');
     }
 }

@@ -7,14 +7,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use App\User;
 use App\User_role;
 use App\User_feedback;
+use App\Device_token;
 
 class AuthController extends Controller
 {
     public function register(Request $request){
-        /* $result = $request->json()->all(); */
+      //$result = $request->json()->all(); 
             // Validasi
        $this->validate($request, [
             'username' => 'required|string',
@@ -22,8 +24,28 @@ class AuthController extends Controller
             'phonenumber' => 'required|numeric|min:10',
             'password' => 'required|string|min:5|confirmed',
             'registerType' => 'required|string'
-        ]);
+        ]);  
+        /*  $role_id = $request->json('registerType');
+        $messages[] = 'The email has already been taken';
+        if(($request->json('email')) && ($request->json('registerType')) ) {
+            $validations =  User::with(['role' => function ($query) use ($role_id) {
+                $query->where('rf_role_id', $role_id );
+            }])->where('email', $request->json('email'))->first();
+               if($validations->role != ''){
+                  return response()->json([
+                    'message' => 'The given data was invalid',
+                    'error' => response()->json(['email' => $messages]),
+                ], 400);
+               }
+         
+        }    */
 
+       //default measurement
+       if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
+        $measurement_id = '1';
+        }else{
+        $measurement_id = null;
+        }
             // Create User
         $resultUser = User::create([
             'username' => $request->json('username'),
@@ -82,7 +104,7 @@ class AuthController extends Controller
             if(Hash::check($password, $resultUser->password) ) {
 
                 // Email && Password exist + Check user_role
-                if(($user_role) == ($resultUser->role->rf_role_id)){
+                if(($user_role) == ($resultUser->role_user->rf_role_id)){
 
                 $params = [
                     'grant_type'=>'password',
@@ -122,11 +144,11 @@ class AuthController extends Controller
            'email' => 'required',
            'password' => 'required',
        ]);    
-
        global $app; 
 
        $email = $request->json('email');
        $password = $request->json('password');
+       $device_token = $request->json('device_token');
        $user_role = '1';
 
        $resultUser = User::where('email', $email)->first();
@@ -140,7 +162,7 @@ class AuthController extends Controller
            if(Hash::check($password, $resultUser->password) ) {
 
                // Email && Password exist + Check user_role
-               if(($user_role) == ($resultUser->role->rf_role_id)){
+               if(($user_role) == ($resultUser->role_provider->rf_role_id)){
 
                $params = [
                    'grant_type'=>'password',
@@ -156,6 +178,12 @@ class AuthController extends Controller
                $json = (array) json_decode($response->getContent());
                $json['id'] = $resultUser->id;
                $json['email'] = $resultUser->email;
+
+              $resultDToken = Device_token::create([
+                   'user_id' => $resultUser->id,
+                   'token' => $device_token
+               ]);
+
                return $response->setContent(json_encode($json)); 
 
                }else{
@@ -243,10 +271,27 @@ class AuthController extends Controller
                 ->delete();
                 $accessToken->revoke();
                 $accessToken->delete();
-
+            DB::table('device_tokens')
+                ->where('user_id', $accessToken->user_id)
+                ->delete();
         return response()->json([
             'success' => true,
             'message' => 'Berhasil logout']);
+    }
+
+    public function check() {
+
+      
+            $user = new \stdClass();
+            $user->email = 'webtoor@gmail.com';
+            $user->name = 'webtoor';
+            Mail::raw('test', function ($mail) use ($user) {
+                $mail->to($user->email, $user->name)->subject('Test Subject');
+            });
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil kirim email!']);
+       
     }
 
 }

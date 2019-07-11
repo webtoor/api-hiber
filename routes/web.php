@@ -15,12 +15,16 @@
 }); 
  
 
-
 $router->post('login_user', ['uses' => 'AuthController@login_user']);
 $router->post('login_provider', ['uses' => 'AuthController@login_provider']);
 $router->post('login_admin', ['uses' => 'AuthController@login_admin']);
+$router->get('check', ['uses' => 'AuthController@check']);
+$router->get('export_latlng/{order_id}', ['uses' => 'ProviderProjectController@exportLatLong']);
 
-//$router->get('timezone', ['uses' => 'OrderController@timezone']);
+
+/* $router->post('fcmtest', ['uses' => 'ProjectController@testFCM']); */
+
+/* $router->get('timezone', ['uses' => 'OrderController@timezone']); */
 
 $router->post('register', ['uses' => 'AuthController@register']);
 
@@ -30,8 +34,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
     /* USER  */
     $router->group(['prefix' => 'user'], function () use ($router) {
         $router->post('order', ['uses' => 'OrderController@create']);
-        $router->get('order_show/{user_id}', ['uses' => 'ProjectController@show']);
+        $router->get('order_baru/{user_id}', ['uses' => 'ProjectController@baru_show']);
+        $router->get('order_berjalan/{user_id}', ['uses' => 'ProjectController@berjalan_show']);
         $router->put('order_status/{order_id}', ['uses' => 'ProjectController@updateStatus']);
+        $router->get('history_provider/{provider_id}', ['uses' => 'ProjectController@historyProvider']);
         $router->get('polygon/{order_id}', ['uses' => 'ProjectController@showPolygon']);
         $router->get('order_proposal/{order_id}/{filter}', ['uses' => 'ProjectController@proposal']);
         $router->get('get_rating/{order_id}', ['uses' => 'ProjectController@getrating']);
@@ -42,14 +48,19 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
      
     /* SERVICE PROVIDER   */  
     $router->group(['prefix' => 'provider'], function () use($router){
-        $router->get('tawaran_show', ['uses' => 'ProviderProjectController@tawaranShow']);
+        $router->get('tawaran_show/{provider_id}/{projecttype}', ['uses' => 'ProviderProjectController@tawaranShow']);
         $router->get('detail_show/{order_id}', ['uses' => 'ProviderProjectController@detailShow']);
         $router->post('bidding', ['uses' => 'ProviderProjectController@bidding']);
         $router->get('berjalan_ikuti_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanIkutiShow']);
+        $router->post('cancel_bid', ['uses' => 'ProviderProjectController@cancelBid']);
+        $router->post('edit_penawaran', ['uses' => 'ProviderProjectController@editPenawaran']);
+
         $router->get('berjalan_kerja_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanKerjaShow']);
         $router->get('get_rating/{provider_id}', ['uses' => 'ProviderProjectController@getRatingShow']);
         $router->get('order_feedback/{provider_id}', ['uses' => 'ProviderProjectController@orderFeedbackShow']);
+        $router->post('send_email', ['uses' => 'ProviderProjectController@sendEmail']);
     });
+
      /* ADMIN   */  
      $router->group(['prefix' => 'admin'], function () use($router){
         $router->get('user_show', ['uses' => 'AdminController@userShow']);

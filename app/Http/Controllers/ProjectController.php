@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use App\Order;
 use App\Order_status;
 use App\Order_location;
@@ -11,18 +12,20 @@ use App\Order_proposal;
 use App\Order_feedback;
 use App\User_feedback;
 use App\User;
+use App\Device_token;
+
 
 
 class ProjectController extends Controller
 {
-    public function show($user_id){
+    public function baru_show($user_id){
         
-     $results = Order_status::with(['order', 'user'])->where('changedby_id', $user_id)->whereIn('status_id', ['1', '2'])->orderBy('id', 'desc')->get();
+     $results = Order_status::with(['order', 'user'])->where('changedby_id', $user_id)->whereIn('status_id', ['1'])->orderBy('id', 'desc')->get();
 
         if($results){
             return response()->json([
                 'success' => true,
-                'order' => $results
+                'order_baru' => $results
             ]);
         }else{
             return response()->json([
@@ -30,6 +33,23 @@ class ProjectController extends Controller
             ]);
         }        
     }
+
+    public function berjalan_show($user_id){
+        
+        $results = Order_status::with(['order', 'user'])->where('changedby_id', $user_id)->whereIn('status_id', ['2'])->orderBy('id', 'desc')->get();
+   
+           if($results){
+               return response()->json([
+                   'success' => true,
+                   'order_berjalan' => $results
+               ]);
+           }else{
+               return response()->json([
+                   'success' => false,
+               ]);
+           }        
+    }
+
     public function showPolygon($order_id){
          $result_polygon = Order_location::where('order_id', $order_id)->get();
          $result_output = Order_output::where('order_id', $order_id)->get();
@@ -51,10 +71,50 @@ class ProjectController extends Controller
     public function updateStatus (Request $request, $order_id){
         $status = $request->json('status');
         $provider_id = $request->json('provider_id');
-       
+        $results_token = Device_token::where('user_id', $provider_id)->OrderBy('id', 'desc')->first();
         if($provider_id){
-             // GUNAKAN && SELESAI
-            $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+             // GUNAKAN 
+             if($status == "2"){
+                $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+                $client = new \GuzzleHttp\Client();
+      
+                        $url = 'https://fcm.googleapis.com/fcm/send';
+                        $headers = [
+                            'Content-Type' =>'application/json',
+                            'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+
+                        ];
+                        $notification = [
+                            "title" => "Proyek Berjalan",
+                            "body" => "Ada yang menggunakan jasa anda",
+                            "sound" => "default",
+                            "click_action" => "FCM_PLUGIN_ACTIVITY",
+                            "icon" =>"fcm_push_icon"
+                        ];
+
+                        $data = [
+                            "title" => "Proyek Berjalan",
+                            "body" => "Ada yang menggunakan Jasa anda",
+                            "action" => "bekerja",
+                            "forceStart" => "1"
+                        ];
+                    
+                    $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+                        'headers' => ['Content-Type' => 'application/json', 
+                        'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+                    ],
+                        'body' => json_encode([
+                            'notification'=> $notification,
+                            'data' => $data,
+                            "to" => $results_token->token,
+                            "priority" => "high"
+                        ])
+                    ]);
+                    $result_subscribe =  $response->getBody();
+             }elseif($status == "3"){
+               // SELESAI
+                $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+             }
         }else{
             // CANCEL
             $result = Order_status::where('order_id',$order_id)->update(['status_id' => $status]);
@@ -118,7 +178,21 @@ class ProjectController extends Controller
         } 
     }
 
+    public function historyProvider($provider_id){
+        $results = Order_status::with('order', 'output', 'order_feedback')->where(['provider_id' => $provider_id, 'status_id' => '3'])->get();
 
+        if($results){
+            return response()->json([
+                'success' => true,
+                'data' => $results
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'data' => $results
+            ]);
+        }
+    }
     public function getRating($order_id){
         $results = Order_status::with('user')->where('order_id', $order_id)->where('status_id', '3')->first();
         if($results){
@@ -179,7 +253,7 @@ class ProjectController extends Controller
 
 
     public function history ($user_id){
-        $results = Order_status::with('order', 'user')->where('changedby_id', $user_id)->whereIn('status_id', ['3', '4'])->orderBy('id', 'desc')->get();
+        $results = Order_status::with('order', 'user')->where('changedby_id', $user_id)->whereIn('status_id', ['3', '4'])->orderBy('updated_at', 'desc')->get();
          
          if($results){
              return response()->json([
@@ -206,5 +280,49 @@ class ProjectController extends Controller
                 'success' => false,
             ]);
         } 
+    }
+
+    public function testFCM(Request $request){
+        $client = new \GuzzleHttp\Client();
+      
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $headers = [
+            'Content-Type' =>'application/json',
+            'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+
+        ];
+        $notification = [
+            "title" => "Notification title",
+            "body" => "Notification body",
+            "sound" => "default",
+            "click_action" => "FCM_PLUGIN_ACTIVITY",
+            "icon" =>"fcm_push_icon"
+        ];
+
+        $data = [
+            "title" => "actual data title",
+            "body" => "actual data body",
+            "action" => "tawaran",
+            "forceStart" => "1"
+        ];
+        $params = [
+            'notification'=> $notification,
+            'data' => $data,
+            "to" => "/topics/tawaran",
+            "priority" => "high"
+        ]; 
+      
+    $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+        'headers' => ['Content-Type' => 'application/json', 
+        'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+    ],
+        'body' => json_encode([
+            'notification'=> $notification,
+            'data' => $data,
+            "to" => "/topics/tawaran",
+            "priority" => "high"
+        ])
+    ]);
+    return $response->getBody();
     }
 }
