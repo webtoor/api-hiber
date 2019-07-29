@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use App\Order;
 use App\Order_status;
 use App\Order_location;
@@ -143,7 +144,7 @@ class ProviderProjectController extends Controller
             $query->with('user_client');
         }, 'order_status' => function ($query) {
             $query->where('status_id', '1');
-        }])->where('order_proposal_by', $provider_id)->orderBy('id', 'desc')->get();
+        }])->where('proposal_by', $provider_id)->orderBy('id', 'desc')->get();
         
         $filtered = $results->filter(function ($value) {
             return $value['order_status'] != null;
@@ -162,19 +163,21 @@ class ProviderProjectController extends Controller
         } 
     }
 
-    public function cancelBid(){
+    public function cancelBid(Request $request){
+    
         $id = $request->json('id');
         $results = Order_proposal::where('id', $id)->delete();
+         // ALTER TABLE tablename AUTO INCREMENT = 1
+         $max = DB::table('order_proposals')->max('id') + 1; 
+         DB::statement("ALTER TABLE order_proposals AUTO_INCREMENT = $max");
 
         if($results){
             return response()->json([
                 'success' => true,
-                'data' => $results,
             ]);
         }else{
             return response()->json([
                 'success' => false,
-                'data' => $results,
             ]);
         }
     }
@@ -183,7 +186,7 @@ class ProviderProjectController extends Controller
         $id = $request->json('id');
         $offered_price = $request->json('offered_price');
 
-        $results = Order_penawaran::where('id', $id)->update(['offered_price'=> $offered_price]);
+        $results = Order_proposal::where('id', $id)->update(['offered_price'=> $offered_price]);
         if($results){
             return response()->json([
                 'success' => true,

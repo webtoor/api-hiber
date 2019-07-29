@@ -10,7 +10,7 @@ class order_proposal extends Model
     protected $fillable = [
         'order_id','proposal_by','offered_price', 'comment'
     ];
-    protected $hidden = ['created_at', 'updated_at', 'id',];
+    protected $hidden = ['created_at', 'updated_at'];
 
     public $timestamps = true;
 
