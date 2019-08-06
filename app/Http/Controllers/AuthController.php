@@ -121,11 +121,11 @@ class AuthController extends Controller
                 $json = (array) json_decode($response->getContent());
                 $json['id'] = $resultUser->id;
                 $json['email'] = $resultUser->email;
-                Device_token::where(['user_id' => $resultUser->id])->delete();
+                Device_token::where(['user_id' => $resultUser->id, 'role_id' => '2',])->delete();
                  // ALTER TABLE tablename AUTO INCREMENT = 1
                 $max = DB::table('device_tokens')->max('id') + 1; 
                 DB::statement("ALTER TABLE device_tokens AUTO_INCREMENT = $max");
-                
+
                 $resultDToken = Device_token::create([
                     'user_id' => $resultUser->id,
                     'role_id' => '2',
@@ -189,12 +189,15 @@ class AuthController extends Controller
                $json = (array) json_decode($response->getContent());
                $json['id'] = $resultUser->id;
                $json['email'] = $resultUser->email;
-
-              $resultDToken = Device_token::create([
-                   'user_id' => $resultUser->id,
-                   'role_id' => '1',
-                   'token' => $device_token
-               ]);
+                Device_token::where(['user_id' => $resultUser->id, 'role_id' => '1'])->delete();
+               // ALTER TABLE tablename AUTO INCREMENT = 1
+                $max = DB::table('device_tokens')->max('id') + 1; 
+                DB::statement("ALTER TABLE device_tokens AUTO_INCREMENT = $max");
+                $resultDToken = Device_token::create([
+                    'user_id' => $resultUser->id,
+                    'role_id' => '1',
+                    'token' => $device_token
+                ]);
 
                return $response->setContent(json_encode($json)); 
 
