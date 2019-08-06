@@ -25,9 +25,9 @@ class AuthController extends Controller
             'password' => 'required|string|min:5|confirmed',
             'registerType' => 'required|string'
         ]);  
-        /*  $role_id = $request->json('registerType');
+       /*  $role_id = $request->json('registerType');
         $messages[] = 'The email has already been taken';
-        if(($request->json('email')) && ($request->json('registerType')) ) {
+        if(($request->json('email')) && ($request->json('registerType'))) {
             $validations =  User::with(['role' => function ($query) use ($role_id) {
                 $query->where('rf_role_id', $role_id );
             }])->where('email', $request->json('email'))->first();
@@ -35,10 +35,13 @@ class AuthController extends Controller
                   return response()->json([
                     'message' => 'The given data was invalid',
                     'error' => response()->json(['email' => $messages]),
-                ], 400);
+                ]);
+               }else{
+                   return "daftar";
                }
-         
-        }    */
+        }else{
+            return "salah register type";
+        }   */
 
        //default measurement
        if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
@@ -123,8 +126,8 @@ class AuthController extends Controller
                 $json['email'] = $resultUser->email;
                 Device_token::where(['user_id' => $resultUser->id, 'role_id' => '2',])->delete();
                  // ALTER TABLE tablename AUTO INCREMENT = 1
-                $max = DB::table('device_tokens')->max('id') + 1; 
-                DB::statement("ALTER TABLE device_tokens AUTO_INCREMENT = $max");
+                //$max = DB::table('device_tokens')->max('id') + 1; 
+                DB::statement("ALTER TABLE device_tokens AUTO_INCREMENT = 1");
 
                 $resultDToken = Device_token::create([
                     'user_id' => $resultUser->id,
