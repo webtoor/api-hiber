@@ -14,6 +14,7 @@ use App\Order_proposal;
 use App\Order_feedback;
 use App\User;
 use App\User_feedback;
+use App\Device_token;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -102,6 +103,7 @@ class ProviderProjectController extends Controller
     }
 
     public function bidding(Request $request){
+        
         $this->validate($request, [
             'offered_price' => 'required',
            ]); 
@@ -109,8 +111,7 @@ class ProviderProjectController extends Controller
         $proposal_by = $request->json('proposal_by');
         $offered_price = $request->json('offered_price');
         $comment = $request->json('comment');
-        
-     
+       
             $checks = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $proposal_by])->get();
             if (count($checks) < 1) {
                 //Problem here
@@ -120,9 +121,11 @@ class ProviderProjectController extends Controller
                 'offered_price' => $offered_price,
                 'comment' => $comment,
             ]);
+            $dv = Device_token::where(['user_role' => '2','user_id' => '26'])->first();
+
             return response()->json([
                 'success' => true,
-                'data' => $hasil
+                'data' => $dv
             ]);
             } elseif ($checks != null) {
                 $hasil = null;
@@ -171,15 +174,9 @@ class ProviderProjectController extends Controller
          $max = DB::table('order_proposals')->max('id') + 1; 
          DB::statement("ALTER TABLE order_proposals AUTO_INCREMENT = $max");
 
-        if($results){
-            return response()->json([
-                'success' => true,
-            ]);
-        }else{
-            return response()->json([
-                'success' => false,
-            ]);
-        }
+         return response()->json([
+            'success' => true,
+        ]);
     }
 
     public function editPenawaran(){

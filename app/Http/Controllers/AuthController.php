@@ -91,6 +91,7 @@ class AuthController extends Controller
 
         $email = $request->json('email');
         $password = $request->json('password');
+        $device_token = $request->json('device_token');
         $user_role = '2';
 
         $resultUser = User::where('email', $email)->first();
@@ -120,6 +121,11 @@ class AuthController extends Controller
                 $json = (array) json_decode($response->getContent());
                 $json['id'] = $resultUser->id;
                 $json['email'] = $resultUser->email;
+                $resultDToken = Device_token::create([
+                    'user_id' => $resultUser->id,
+                    'role_id' => $user_role,
+                    'token' => $device_token
+                ]);
                 return $response->setContent(json_encode($json)); 
 
                 }else{
