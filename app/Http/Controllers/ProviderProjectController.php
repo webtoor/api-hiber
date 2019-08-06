@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -111,7 +112,9 @@ class ProviderProjectController extends Controller
         $proposal_by = $request->json('proposal_by');
         $offered_price = $request->json('offered_price');
         $comment = $request->json('comment');
-       
+        $order_results = Order::find($order_id);
+        $results_token = Device_token::where(['user_role' => '2','user_id' => '26'])->OrderBy('id', 'desc')->first();
+
             $checks = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $proposal_by])->get();
             if (count($checks) < 1) {
                 //Problem here
@@ -121,20 +124,57 @@ class ProviderProjectController extends Controller
                 'offered_price' => $offered_price,
                 'comment' => $comment,
             ]);
-            $dv = Device_token::where(['user_role' => '2','user_id' => '26'])->first();
+            $client = new \GuzzleHttp\Client();
+      
+            $url = 'https://fcm.googleapis.com/fcm/send';
+            $headers = [
+                'Content-Type' =>'application/json',
+                'Authorization' => 'key=AIzaSyAoU0v2lfCkHgBcWV0xWzOb6l0lG8UcGDo'
 
+            ];
+            $notification = [
+                "title" => "Proyek Status",
+                "body" => "Ada yang bid proyek anda ",
+                "order_id" => $order_id,
+                "subject" => $order_results->subject,
+                "sound" => "default",
+                "click_action" => "FCM_PLUGIN_ACTIVITY",
+                "icon" =>"fcm_push_icon"
+            ];
+
+            $data = [
+                "title" => "Proyek Status",
+                "body" => "Ada yang bid proyek anda",
+                "order_id" => $order_id,
+                "subject" => $order_results->subject,
+                "action" => "bidprovider",
+                "forceStart" => "1"
+            ];
+        
+        $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+            'headers' => ['Content-Type' => 'application/json', 
+            'Authorization' => 'key=AIzaSyAoU0v2lfCkHgBcWV0xWzOb6l0lG8UcGDo'
+        ],
+            'body' => json_encode([
+                'notification'=> $notification,
+                'data' => $data,
+                "to" => $results_token->token,
+                "priority" => "high"
+            ])
+        ]);
+        $result_subscribe =  $response->getBody();
+        return response()->json([
+            'success' => true,
+            'data' => $hasil
+        ]);
+        } elseif ($checks != null) {
+            $hasil = null;
             return response()->json([
                 'success' => true,
-                'data' => $dv
+                'message' => "double",
+                'data' => $hasil
             ]);
-            } elseif ($checks != null) {
-                $hasil = null;
-                return response()->json([
-                    'success' => true,
-                    'message' => "double",
-                    'data' => $hasil
-                ]);
-            } 
+        } 
 
           
             

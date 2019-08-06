@@ -123,7 +123,7 @@ class AuthController extends Controller
                 $json['email'] = $resultUser->email;
                 $resultDToken = Device_token::create([
                     'user_id' => $resultUser->id,
-                    'role_id' => $user_role,
+                    'role_id' => '2',
                     'token' => $device_token
                 ]);
                 return $response->setContent(json_encode($json)); 
@@ -187,6 +187,7 @@ class AuthController extends Controller
 
               $resultDToken = Device_token::create([
                    'user_id' => $resultUser->id,
+                   'role_id' => '1',
                    'token' => $device_token
                ]);
 
