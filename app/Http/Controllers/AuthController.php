@@ -280,15 +280,14 @@ class AuthController extends Controller
             DB::table('oauth_refresh_tokens')
                 ->where('access_token_id', $accessToken->id)
                 ->update(['revoked' => true]);
-                
             DB::table('oauth_refresh_tokens')
                 ->where('access_token_id', $accessToken->id)
                 ->delete();
                 $accessToken->revoke();
                 $accessToken->delete();
-            DB::table('device_tokens')
-                ->where('user_id', $accessToken->user_id)
-                ->delete();
+         /*    DB::table('device_tokens')
+                ->where('user_id' , $accessToken->user_id)
+                ->delete(); */
         return response()->json([
             'success' => true,
             'message' => 'Berhasil logout']);
