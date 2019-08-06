@@ -113,7 +113,7 @@ class ProviderProjectController extends Controller
         $offered_price = $request->json('offered_price');
         $comment = $request->json('comment');
         $order_results = Order::find($order_id);
-        $results_token = Device_token::where(['user_role' => '2','user_id' => '26'])->OrderBy('id', 'desc')->first();
+        $results_token = Device_token::where(['role_id' => '2','user_id' => $order_results->createdby])->OrderBy('id', 'desc')->first();
 
             $checks = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $proposal_by])->get();
             if (count($checks) < 1) {
@@ -133,7 +133,7 @@ class ProviderProjectController extends Controller
 
             ];
             $notification = [
-                "title" => "Proyek Status",
+                "title" => "Status Proyek",
                 "body" => "Ada yang bid proyek anda ",
                 "order_id" => $order_id,
                 "subject" => $order_results->subject,
@@ -143,7 +143,7 @@ class ProviderProjectController extends Controller
             ];
 
             $data = [
-                "title" => "Proyek Status",
+                "title" => "Status Proyek",
                 "body" => "Ada yang bid proyek anda",
                 "order_id" => $order_id,
                 "subject" => $order_results->subject,
