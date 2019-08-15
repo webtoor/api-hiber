@@ -19,7 +19,7 @@ use App\Device_token;
 
 use Illuminate\Support\Facades\Auth;
 
-class ProviderProjectController extends Controller
+class ProviderProjectControllerV4 extends Controller
 {   
     public function getRatingShow($provider_id){
         $results =  User_feedback::where('user_id', $provider_id)->first();

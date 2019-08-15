@@ -61,6 +61,21 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
         $router->post('send_email', ['uses' => 'ProviderProjectController@sendEmail']);
     });
 
+     /* SERVICE PROVIDER   */  
+     $router->group(['prefix' => 'provider/v4'], function () use($router){
+        $router->get('tawaran_show/{provider_id}/{projecttype}', ['uses' => 'ProviderProjectControllerV4@tawaranShow']);
+        $router->get('detail_show/{order_id}', ['uses' => 'ProviderProjectController@detailShow']);
+        $router->post('bidding', ['uses' => 'ProviderProjectController@bidding']);
+        $router->get('berjalan_ikuti_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanIkutiShow']);
+        $router->post('cancel_bid', ['uses' => 'ProviderProjectController@cancelBid']);
+        $router->post('edit_penawaran', ['uses' => 'ProviderProjectController@editPenawaran']);
+
+        $router->get('berjalan_kerja_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanKerjaShow']);
+        $router->get('get_rating/{provider_id}', ['uses' => 'ProviderProjectController@getRatingShow']);
+        $router->get('order_feedback/{provider_id}', ['uses' => 'ProviderProjectController@orderFeedbackShow']);
+        $router->post('send_email', ['uses' => 'ProviderProjectController@sendEmail']);
+    });
+
      /* ADMIN   */  
      $router->group(['prefix' => 'admin'], function () use($router){
         $router->get('user_show', ['uses' => 'AdminController@userShow']);
