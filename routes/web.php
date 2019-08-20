@@ -28,11 +28,11 @@ $router->get('export_latlng/{order_id}', ['uses' => 'ProviderProjectController@e
 
 $router->post('register', ['uses' => 'AuthController@register']);
 
-$router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
+$router->group(['prefix' => 'api', 'middleware' => ['auth:api']], function () use ($router) {
     $router->get('logout', ['uses' => 'AuthController@logout']);
 
     /* USER  */
-    $router->group(['prefix' => 'user'], function () use ($router) {
+    $router->group(['prefix' => 'user', 'middleware' => ['client_hiber']], function () use ($router) {
         $router->post('order', ['uses' => 'OrderController@create']);
         $router->get('order_baru/{user_id}', ['uses' => 'ProjectController@baru_show']);
         $router->get('order_berjalan/{user_id}', ['uses' => 'ProjectController@berjalan_show']);
@@ -47,7 +47,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
     });
      
     /* SERVICE PROVIDER   */  
-    $router->group(['prefix' => 'provider'], function () use($router){
+    $router->group(['prefix' => 'provider', 'middleware' => ['droner_hiber']], function () use($router){
         $router->get('tawaran_show/{provider_id}/{projecttype}', ['uses' => 'ProviderProjectController@tawaranShow']);
         $router->get('detail_show/{order_id}', ['uses' => 'ProviderProjectController@detailShow']);
         $router->post('bidding', ['uses' => 'ProviderProjectController@bidding']);
@@ -62,11 +62,11 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use 
     });
 
      /* SERVICE PROVIDER   */  
-     $router->group(['prefix' => 'provider/v4'], function () use($router){
+     $router->group(['prefix' => 'provider/v4', 'middleware' => ['droner_hiber']], function () use($router){
         $router->get('tawaran_show/{provider_id}/{projecttype}', ['uses' => 'ProviderProjectControllerV4@tawaranShow']);
         $router->get('detail_show/{order_id}', ['uses' => 'ProviderProjectController@detailShow']);
         $router->post('bidding', ['uses' => 'ProviderProjectController@bidding']);
-        $router->get('berjalan_ikuti_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanIkutiShow']);
+        $router->get('berjalan_ikuti_show/{provider_id}', ['uses' => 'ProviderProjectControllerV4@berjalanIkutiShow']);
         $router->post('cancel_bid', ['uses' => 'ProviderProjectController@cancelBid']);
         $router->post('edit_penawaran', ['uses' => 'ProviderProjectController@editPenawaran']);
 

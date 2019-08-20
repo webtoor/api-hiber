@@ -1,5 +1,7 @@
 <?php //config/auth.php
- return [ 'defaults' => [
+ return 
+ [ 
+    'defaults' => [
         'guard' => 'api',
         'passwords' => 'users',
     ],

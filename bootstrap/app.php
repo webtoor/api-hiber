@@ -76,7 +76,11 @@ $app->middleware([
 
  $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
-     ]);
+     'client_hiber' => App\Http\Middleware\ClientMiddleware::class,
+     'droner_hiber' => App\Http\Middleware\DronerMiddleware::class,
+     'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class, 
+     'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class
+    ]);
 
 /*
 |--------------------------------------------------------------------------

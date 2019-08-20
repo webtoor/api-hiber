@@ -47,13 +47,13 @@ class ProviderProjectControllerV4 extends Controller
             if($filterProject != '0'){
                 $collection = Order_status::with(['order'  => function ($query) use ($filterProject) {
                     $query->where('projecttype', $filterProject);
-                },'user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get();
+                },'user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->paginate(5);
                 $results = $collection->filter(function ($value) {
                     return $value['order'] != null;
                 })->values();
             }else{
                 //Default Show
-                $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get();
+                $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->paginate(5);
             }
         }else{
             if($filterProject != '0'){
@@ -73,12 +73,12 @@ class ProviderProjectControllerV4 extends Controller
 
         if($results){
             return response()->json([
-                'success' => true,
+                'success' => "true",
                 'data' => $results
             ]);
         }else{
             return response()->json([
-                'success' => false,
+                'success' => "false",
                 'data' => $results
             ]);
         }
@@ -183,25 +183,36 @@ class ProviderProjectControllerV4 extends Controller
 
     public function berjalanIkutiShow($provider_id){
         $status_id = '1';
-         $results = Order_proposal::with(['order' => function ($query) {
+        $results = Order_proposal::with(['order' => function ($query) {
             $query->with('user_client');
         }, 'order_status' => function ($query) {
             $query->where('status_id', '1');
-        }])->where('proposal_by', $provider_id)->orderBy('id', 'desc')->get();
-        
-        $filtered = $results->filter(function ($value) {
+        }])->where('proposal_by', $provider_id)->orderBy('id', 'desc')->paginate(5);
+        $results_data =  $results->getCollection()->transform(function ($value) {
+            // Your code here
+            return $value;
+        });
+        $filtered = $results_data->filter(function ($value) {
             return $value['order_status'] != null;
         })->values();
+        $filtered_count = $results_data->filter(function ($value) {
+            return $value['order_status'] == null;
+        })->values();
 
+        $newresults = new \Illuminate\Pagination\LengthAwarePaginator(
+            $filtered,
+            $results->total() - count($filtered_count),
+            $results->perPage()
+        );
           if($filtered){
             return response()->json([
                 'success' => true,
-                'data' => $filtered,
+                'data' => $newresults
             ]);
         }else{
             return response()->json([
                 'success' => false,
-                'data' => $filtered,
+                'data' => $newresults
             ]); 
         } 
     }

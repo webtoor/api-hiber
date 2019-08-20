@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-class Authenticate
+class DronerMiddleware
 {
     /**
      * The authentication guard factory instance.
@@ -37,12 +37,13 @@ class Authenticate
     {
         //return $this->auth->user()->token();
 
-        if ($this->auth->guard($guard)->guest()) {
+        if($this->auth->user()->role_user->rf_role_id !== 1){
             return response()->json([
                 'status' => 401,
                 'message' => 'Unauthorized'], 200);
         }
 
         return $next($request);
+
     }
 }
