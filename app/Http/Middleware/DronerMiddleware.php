@@ -37,7 +37,7 @@ class DronerMiddleware
     {
         //return $this->auth->user()->token();
 
-        if($this->auth->user()->role_user->rf_role_id !== 1){
+        if($this->auth->user()->role_provider->rf_role_id !== 1){
             return response()->json([
                 'status' => 401,
                 'message' => 'Unauthorized'], 200);
