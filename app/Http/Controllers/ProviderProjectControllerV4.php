@@ -48,9 +48,21 @@ class ProviderProjectControllerV4 extends Controller
                 $collection = Order_status::with(['order'  => function ($query) use ($filterProject) {
                     $query->where('projecttype', $filterProject);
                 },'user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->paginate(5);
+               /*  $results = $collection->filter(function ($value) {
+                    return $value['order'] != null;
+                })->values(); */
                 $results = $collection->filter(function ($value) {
                     return $value['order'] != null;
                 })->values();
+                $filtered_count = $collection->filter(function ($value) {
+                    return $value['order'] == null;
+                })->values();
+        
+                $newresults = new \Illuminate\Pagination\LengthAwarePaginator(
+                    $filtered,
+                    $results->total() - count($filtered_count),
+                    $results->perPage()
+                );
             }else{
                 //Default Show
                 $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->paginate(5);
@@ -63,6 +75,15 @@ class ProviderProjectControllerV4 extends Controller
                 $results = $collection->filter(function ($value) {
                     return $value['order'] != null;
                 })->values();
+                $filtered_count = $collection->filter(function ($value) {
+                    return $value['order'] == null;
+                })->values();
+        
+                $newresults = new \Illuminate\Pagination\LengthAwarePaginator(
+                    $filtered,
+                    $results->total() - count($filtered_count),
+                    $results->perPage()
+                );
             }else{
                 //Default Show
                 $results = Order_status::with(['order' ,'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->paginate(5);
