@@ -65,7 +65,7 @@ class ProviderProjectController extends Controller
                 })->values();
             }else{
                 //Default Show
-                $results = Order_status::with(['order' ,'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->paginate(5);
+                $results = Order_status::with(['order' ,'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->get();
             }
 
         }   

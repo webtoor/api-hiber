@@ -94,30 +94,30 @@ class ProviderProjectControllerV4 extends Controller
 
         if($results){
             return response()->json([
-                'success' => "true",
+                'status' => "1",
                 'data' => $results
             ]);
         }else{
             return response()->json([
-                'success' => "false",
+                'status' => "0",
                 'data' => $results
             ]);
         }
                         
     }
 
-    public function detailShow($order_id){
+    public function detailShow($order_id){     
         $results_polygon = Order_location::where('order_id', $order_id)->get();
         $results_output = Order_output::where('order_id', $order_id)->get();
         if($results_polygon && $results_output){
             return response()->json([
-                'success' => true,
+                'status' => '1',
                 'polygon' => $results_polygon,
                 'output'   => $results_output,
             ]);
         }else{
             return response()->json([
-                'success' => false,
+                'status' => '0',
                 'polygon' => $results_polygon,
                 'output'   => $results_output,
             ]);
@@ -227,12 +227,12 @@ class ProviderProjectControllerV4 extends Controller
         );
           if($filtered){
             return response()->json([
-                'success' => true,
+                'status' => '1',
                 'data' => $newresults
             ]);
         }else{
             return response()->json([
-                'success' => false,
+                'status' => '0',
                 'data' => $newresults
             ]); 
         } 
@@ -273,7 +273,7 @@ class ProviderProjectControllerV4 extends Controller
         $status_id = '2';
         $results = Order_status::with(['order' => function ($query) {
             $query->with('user_client');
-        }, 'proposal_by'])->where(['provider_id' => $provider_id, 'status_id' => $status_id])->orderBy('id', 'desc')->get();
+        }, 'proposal_by'])->where(['provider_id' => $provider_id, 'status_id' => $status_id])->orderBy('id', 'desc')->paginate(5);
         
         if($results){
             return response()->json([

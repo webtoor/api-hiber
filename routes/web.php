@@ -61,16 +61,16 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth:api']], function () us
         $router->post('send_email', ['uses' => 'ProviderProjectController@sendEmail']);
     });
 
-     /* SERVICE PROVIDER   */  
+     /* SERVICE PROVIDER V4   */  
      $router->group(['prefix' => 'provider/v4', 'middleware' => ['droner_hiber']], function () use($router){
         $router->get('tawaran_show/{provider_id}/{projecttype}', ['uses' => 'ProviderProjectControllerV4@tawaranShow']);
-        $router->get('detail_show/{order_id}', ['uses' => 'ProviderProjectController@detailShow']);
+        $router->get('detail_show/{order_id}', ['uses' => 'ProviderProjectControllerV4@detailShow']);
         $router->post('bidding', ['uses' => 'ProviderProjectController@bidding']);
         $router->get('berjalan_ikuti_show/{provider_id}', ['uses' => 'ProviderProjectControllerV4@berjalanIkutiShow']);
         $router->post('cancel_bid', ['uses' => 'ProviderProjectController@cancelBid']);
         $router->post('edit_penawaran', ['uses' => 'ProviderProjectController@editPenawaran']);
 
-        $router->get('berjalan_kerja_show/{provider_id}', ['uses' => 'ProviderProjectController@berjalanKerjaShow']);
+        $router->get('berjalan_kerja_show/{provider_id}', ['uses' => 'ProviderProjectController4@berjalanKerjaShow']);
         $router->get('get_rating/{provider_id}', ['uses' => 'ProviderProjectController@getRatingShow']);
         $router->get('order_feedback/{provider_id}', ['uses' => 'ProviderProjectController@orderFeedbackShow']);
         $router->post('send_email', ['uses' => 'ProviderProjectController@sendEmail']);

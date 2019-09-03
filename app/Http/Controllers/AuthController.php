@@ -153,7 +153,6 @@ class AuthController extends Controller
     }
 
     public function login_provider (Request $request){
-
         $this->validate($request,[
            'email' => 'required',
            'password' => 'required',
@@ -166,16 +165,17 @@ class AuthController extends Controller
        $user_role = '1';
 
        $resultUser = User::where('email', $email)->first();
-           if(!$resultUser){
-               // Email not exist 
+           if((!$resultUser) || (!$resultUser->role_provider)){
+               // Email not exist OR user_role null
                return response()->json([
                    "error" => "invalid_credentials",
                    "message" => "The user credentials were incorrect"
                   ]);
            }
+
            if(Hash::check($password, $resultUser->password) ) {
 
-               // Email && Password exist + Check user_role
+              // Email && Password exist + Check user_role
                if(($user_role) == ($resultUser->role_provider->rf_role_id)){
 
                $params = [
