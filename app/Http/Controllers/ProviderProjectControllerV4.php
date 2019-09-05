@@ -125,7 +125,7 @@ class ProviderProjectControllerV4 extends Controller
     }
 
     public function bidding(Request $request){
-        
+        return response()->json($request->all());
         $this->validate($request, [
             'offered_price' => 'required',
            ]); 
@@ -202,7 +202,7 @@ class ProviderProjectControllerV4 extends Controller
 
     }
 
-    public function berjalanIkutiShow($provider_id){
+    /* public function berjalanIkutiShow($provider_id){
         $status_id = '1';
         $results = Order_proposal::with(['order' => function ($query) {
             $query->with('user_client');
@@ -236,6 +236,31 @@ class ProviderProjectControllerV4 extends Controller
                 'data' => $newresults
             ]); 
         } 
+    } */
+
+    public function berjalanIkutiShow($provider_id){
+         $status_id = '1';
+         $results = Order_proposal::with(['order' => function ($query) {
+            $query->with('user_client');
+        }, 'order_status' => function ($query) {
+            $query->where('status_id', '1');
+        }])->where('proposal_by', $provider_id)->orderBy('id', 'desc')->get();
+        
+        $filtered = $results->filter(function ($value) {
+            return $value['order_status'] != null;
+        })->values();
+
+          if($filtered){
+            return response()->json([
+                'status' => '1',
+                'data' => $filtered,
+            ]);
+        }else{
+            return response()->json([
+                'status' => '0',
+                'data' => $filtered,
+            ]); 
+        } 
     }
 
     public function cancelBid(Request $request){
@@ -247,7 +272,7 @@ class ProviderProjectControllerV4 extends Controller
          DB::statement("ALTER TABLE order_proposals AUTO_INCREMENT = $max");
 
          return response()->json([
-            'success' => true,
+            'status' => '1',
         ]);
     }
 
@@ -273,16 +298,16 @@ class ProviderProjectControllerV4 extends Controller
         $status_id = '2';
         $results = Order_status::with(['order' => function ($query) {
             $query->with('user_client');
-        }, 'proposal_by'])->where(['provider_id' => $provider_id, 'status_id' => $status_id])->orderBy('id', 'desc')->paginate(5);
+        }, 'proposal_by'])->where(['provider_id' => $provider_id, 'status_id' => $status_id])->orderBy('id', 'desc')->get();
         
         if($results){
             return response()->json([
-                'success' => true,
+                'status' => '1',
                 'data' => $results,
             ]);
         }else{
             return response()->json([
-                'success' => false,
+                'status' => '0',
                 'data' => $results,
             ]);
         }
