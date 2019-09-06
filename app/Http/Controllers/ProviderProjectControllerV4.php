@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ProviderProjectControllerV4 extends Controller
 {   
+
+    public $perPage = 5;
+
     public function getRatingShow($provider_id){
         $results =  User_feedback::where('user_id', $provider_id)->first();
         if($results){
@@ -45,62 +48,55 @@ class ProviderProjectControllerV4 extends Controller
                 $array_order_id[] = $orders['order_id'];
             }
             if($filterProject != '0'){
-                $collection = Order_status::with(['order'  => function ($query) use ($filterProject) {
+                $results = Order_status::with(['order'  => function ($query) use ($filterProject) {
                     $query->where('projecttype', $filterProject);
-                },'user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->paginate(5);
-               /*  $results = $collection->filter(function ($value) {
-                    return $value['order'] != null;
-                })->values(); */
-                $results = $collection->filter(function ($value) {
+                },'user_clients'])->where('status_id', $status_id)
+                ->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get()->filter(function ($value) {
                     return $value['order'] != null;
                 })->values();
-                $filtered_count = $collection->filter(function ($value) {
-                    return $value['order'] == null;
-                })->values();
-        
+              
+
                 $newresults = new \Illuminate\Pagination\LengthAwarePaginator(
-                    $filtered,
-                    $results->total() - count($filtered_count),
-                    $results->perPage()
-                );
+                    $results->slice((\Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage() *
+                    $this->perPage)-$this->perPage,
+                    $this->perPage)->all(), count($results),
+                    $this->perPage, null, ['path' => '']);
             }else{
                 //Default Show
-                $results = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->paginate(5);
+                $newresults = Order_status::with(['order','user_clients'])->where('status_id', $status_id)->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->paginate(5);
             }
         }else{
             if($filterProject != '0'){
-                $collection = Order_status::with(['order'  => function ($query) use ($filterProject) {
+                $results = Order_status::with(['order'  => function ($query) use ($filterProject) {
                     $query->where('projecttype', $filterProject);
-                },'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->get();
-                $results = $collection->filter(function ($value) {
+                },'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->get()->filter(function ($value) {
                     return $value['order'] != null;
                 })->values();
-                $filtered_count = $collection->filter(function ($value) {
-                    return $value['order'] == null;
-                })->values();
+            
         
+               
                 $newresults = new \Illuminate\Pagination\LengthAwarePaginator(
-                    $filtered,
-                    $results->total() - count($filtered_count),
-                    $results->perPage()
-                );
+                    $results->slice((\Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage() *
+                    $this->perPage)-$this->perPage,
+                    $this->perPage)->all(), count($results),
+                    $this->perPage, null, ['path' => '']);
             }else{
                 //Default Show
-                $results = Order_status::with(['order' ,'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->paginate(5);
+                $newresults = Order_status::with(['order' ,'user_clients'])->where('status_id', $status_id)->orderBy('id', 'desc')->paginate(5);
             }
 
         }   
 
 
-        if($results){
+        if($newresults){
             return response()->json([
                 'status' => "1",
-                'data' => $results
+                'data' => $newresults
             ]);
         }else{
             return response()->json([
                 'status' => "0",
-                'data' => $results
+                'data' => $newresults
             ]);
         }
                         
@@ -355,7 +351,7 @@ class ProviderProjectControllerV4 extends Controller
             $mail->from('noreply@eidaramata.com','Hiber Eidara Matadata Presisi');
         });
         return response()->json([
-                'success' => true,
+                'status' => "1",
                 'message' => 'Berhasil kirim email!',
                 'email' => $email
         ]);

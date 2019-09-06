@@ -73,7 +73,7 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth:api']], function () us
         $router->get('berjalan_kerja_show/{provider_id}', ['uses' => 'ProviderProjectControllerV4@berjalanKerjaShow']);
         $router->get('get_rating/{provider_id}', ['uses' => 'ProviderProjectController@getRatingShow']);
         $router->get('order_feedback/{provider_id}', ['uses' => 'ProviderProjectControllerV4@orderFeedbackShow']);
-        $router->post('send_email', ['uses' => 'ProviderProjectController@sendEmail']);
+        $router->post('send_email', ['uses' => 'ProviderProjectControllerV4@sendEmail']);
     });
 
      /* ADMIN   */  
