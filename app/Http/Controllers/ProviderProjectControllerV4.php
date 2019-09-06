@@ -125,7 +125,10 @@ class ProviderProjectControllerV4 extends Controller
     }
 
     public function bidding(Request $request){
-        return response()->json($request->all());
+       /*  return response()->json([
+            'status' => "2",
+            'data' => $request->all()
+        ]); */
         $this->validate($request, [
             'offered_price' => 'required',
            ]); 
@@ -135,8 +138,9 @@ class ProviderProjectControllerV4 extends Controller
         $comment = $request->json('comment');
         $order_results = Order::find($order_id);
         $results_token = Device_token::where(['role_id' => '2','user_id' => $order_results->createdby])->OrderBy('id', 'desc')->first();
-
+       
             $checks = Order_proposal::where(['order_id' => $order_id, 'proposal_by' => $proposal_by])->get();
+           
             if (count($checks) < 1) {
                 //Problem here
                 $hasil = Order_proposal::create([
@@ -145,7 +149,8 @@ class ProviderProjectControllerV4 extends Controller
                 'offered_price' => $offered_price,
                 'comment' => $comment,
             ]);
-            $client = new \GuzzleHttp\Client();
+            
+            /* $client = new \GuzzleHttp\Client();
       
             $url = 'https://fcm.googleapis.com/fcm/send';
             $headers = [
@@ -182,16 +187,16 @@ class ProviderProjectControllerV4 extends Controller
                 "to" => $results_token->token,
                 "priority" => "high"
             ])
-        ]);
-        $result_subscribe =  $response->getBody();
+        ]); 
+        $result_subscribe =  $response->getBody(); */
         return response()->json([
-            'success' => true,
-            'data' => $hasil
+            'status' => "1",
+            'data' => $order_results
         ]);
         } elseif ($checks != null) {
             $hasil = null;
             return response()->json([
-                'success' => true,
+                'status' => "2",
                 'message' => "double",
                 'data' => $hasil
             ]);
@@ -314,15 +319,15 @@ class ProviderProjectControllerV4 extends Controller
     }
 
     public function orderFeedbackShow($provider_id){
-        $results =  Order_feedback::with(['client', 'order'])->where('for', $provider_id)->orderBy('updated_at', 'desc')->get();
+        $results = Order_feedback::with(['client', 'order'])->where('for', $provider_id)->orderBy('updated_at', 'desc')->get();
         if($results){
             return response()->json([
-                'success' => true,
+                'status' => "1",
                 'data' => $results,
             ]);
         }else{
             return response()->json([
-                'success' => false,
+                'status' => "0",
                 'data' => $results,
             ]);
         }
