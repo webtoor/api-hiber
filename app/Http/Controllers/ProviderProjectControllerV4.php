@@ -28,17 +28,16 @@ class ProviderProjectControllerV4 extends Controller
         $results =  User_feedback::where('user_id', $provider_id)->first();
         if($results){
             return response()->json([
-                'success' => true,
+                'status' => "1",
                 'data' => $results
             ]);
         }else{
             return response()->json([
-                'success' => false,
+                'status' => "0",
                 'data' => $results
             ]);
         }
     }
-
     public function tawaranShow($provider_id, $projecttype){
         $status_id = '1';
         $order_id = Order_proposal::where('proposal_by', $provider_id)->get();
@@ -48,7 +47,7 @@ class ProviderProjectControllerV4 extends Controller
                 $array_order_id[] = $orders['order_id'];
             }
             if($filterProject != '0'){
-                $results = Order_status::with(['order'  => function ($query) use ($filterProject) {
+               $results = Order_status::with(['order'  => function ($query) use ($filterProject) {
                     $query->where('projecttype', $filterProject);
                 },'user_clients'])->where('status_id', $status_id)
                 ->whereNotIn('order_id', $array_order_id)->orderBy('id', 'desc')->get()->filter(function ($value) {
@@ -59,7 +58,7 @@ class ProviderProjectControllerV4 extends Controller
                 $newresults = new \Illuminate\Pagination\LengthAwarePaginator(
                     $results->slice((\Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage() *
                     $this->perPage)-$this->perPage,
-                    $this->perPage)->all(), count($results),
+                    $this->perPage)->values(), count($results),
                     $this->perPage, null, ['path' => '']);
             }else{
                 //Default Show
@@ -78,7 +77,7 @@ class ProviderProjectControllerV4 extends Controller
                 $newresults = new \Illuminate\Pagination\LengthAwarePaginator(
                     $results->slice((\Illuminate\Pagination\LengthAwarePaginator::resolveCurrentPage() *
                     $this->perPage)-$this->perPage,
-                    $this->perPage)->all(), count($results),
+                    $this->perPage)->values(), count($results),
                     $this->perPage, null, ['path' => '']);
             }else{
                 //Default Show
@@ -146,7 +145,7 @@ class ProviderProjectControllerV4 extends Controller
                 'comment' => $comment,
             ]);
             
-            /* $client = new \GuzzleHttp\Client();
+           /*  $client = new \GuzzleHttp\Client();
       
             $url = 'https://fcm.googleapis.com/fcm/send';
             $headers = [
@@ -296,11 +295,13 @@ class ProviderProjectControllerV4 extends Controller
 
     }
     public function berjalanKerjaShow($provider_id){
+     
         $status_id = '2';
         $results = Order_status::with(['order' => function ($query) {
             $query->with('user_client');
         }, 'proposal_by'])->where(['provider_id' => $provider_id, 'status_id' => $status_id])->orderBy('id', 'desc')->get();
         
+
         if($results){
             return response()->json([
                 'status' => '1',
