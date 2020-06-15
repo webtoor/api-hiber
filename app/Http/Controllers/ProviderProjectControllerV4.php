@@ -144,16 +144,16 @@ class ProviderProjectControllerV4 extends Controller
                 'offered_price' => $offered_price,
                 'comment' => $comment,
             ]);
-            
-           /*  $client = new \GuzzleHttp\Client();
+            if ($results_token) {
+                $client = new \GuzzleHttp\Client();
       
-            $url = 'https://fcm.googleapis.com/fcm/send';
-            $headers = [
+                $url = 'https://fcm.googleapis.com/fcm/send';
+                $headers = [
                 'Content-Type' =>'application/json',
                 'Authorization' => 'key=AIzaSyAoU0v2lfCkHgBcWV0xWzOb6l0lG8UcGDo'
 
             ];
-            $notification = [
+                $notification = [
                 "title" => "Status Proyek",
                 "body" => "Ada yang bid proyek anda ",
                 "order_id" => $order_id,
@@ -163,7 +163,7 @@ class ProviderProjectControllerV4 extends Controller
                 "icon" =>"fcm_push_icon"
             ];
 
-            $data = [
+                $data = [
                 "title" => "Status Proyek",
                 "body" => "Ada yang bid proyek anda",
                 "order_id" => $order_id,
@@ -172,8 +172,8 @@ class ProviderProjectControllerV4 extends Controller
                 "forceStart" => "1"
             ];
         
-        $response = $client->post('https://fcm.googleapis.com/fcm/send', [
-            'headers' => ['Content-Type' => 'application/json', 
+                $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+            'headers' => ['Content-Type' => 'application/json',
             'Authorization' => 'key=AIzaSyAoU0v2lfCkHgBcWV0xWzOb6l0lG8UcGDo'
         ],
             'body' => json_encode([
@@ -182,13 +182,14 @@ class ProviderProjectControllerV4 extends Controller
                 "to" => $results_token->token,
                 "priority" => "high"
             ])
-        ]); 
-        $result_subscribe =  $response->getBody(); */
+        ]);
+                $result_subscribe =  $response->getBody();
+        }
         return response()->json([
             'status' => "1",
-            'data' => $order_results
+            'data' => $hasil
         ]);
-        } elseif ($checks != null) {
+        } else{
             $hasil = null;
             return response()->json([
                 'status' => "2",

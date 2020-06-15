@@ -43,23 +43,36 @@ class AuthController extends Controller
             return "salah register type";
         }   */
 
+	// --- perubahan pada semua request->json menjadi request->input ---
        //default measurement
-       if($request->json('registerType') == '1' || $request->json('registerType') == '2'){
+       if($request->input('registerType') == '1' || $request->input('registerType') == '2'){
         $measurement_id = '1';
         }else{
         $measurement_id = null;
         }
-            // Create User
+
+	// -- penambahan sementara untuk upload KTP pada saat registrasi --
+	$new_filename = '';
+        if($request->hasFile('uploaded')){
+            $upload = $request->file('uploaded');
+	    $new_filename = ($upload->extension() == 'png') ? $request->input('email').'.png' :  $request->input('email').'.jpeg';
+            $upload->move(app()->basePath('public/registration/uploaded/'), $new_filename);
+        }
+
+        // Create User
         $resultUser = User::create([
-            'username' => $request->json('username'),
-            'email' => $request->json('email'),
-            'phonenumber' => $request->json('phonenumber'),
-            'password' => Hash::make($request->json('password')),
+	    'firstname' => $request->input('firstname'),
+	    'lastname' => $request->input('lastname'),
+            'username' => $request->input('username'),
+            'email' => $request->input('email'),
+            'phonenumber' => $request->input('phonenumber'),
+            'password' => Hash::make($request->input('password')),
+            'uploaded' => $new_filename
         ]);
             // Create User role 
         $resultRole = User_role::create([
             'user_id' => $resultUser->id,
-            'rf_role_id' => $request->json('registerType')
+            'rf_role_id' => $request->input('registerType')
         ]);
 
         // if provider
