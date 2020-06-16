@@ -19,5 +19,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('register', 'V2\AuthController@register');
         $router->post('login-client', 'V2\AuthController@loginClient');
         $router->post('login-provider', 'V2\AuthController@loginProvider');
+
+
+          /* SERVICE PROVIDER V4   */
+        $router->group(['prefix' => 'provider', 'middleware' => ['auth:api', 'droner_hiber']], function () use($router){
+            $router->get('offer/{provider_id}/{projecttype}', ['uses' => 'V2/ProviderControllerV4@offerShow']);
+        });
     });
 });
