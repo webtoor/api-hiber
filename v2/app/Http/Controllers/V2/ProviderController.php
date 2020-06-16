@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\OrderProposal;
+use App\Models\OrderLocation;
+use App\Models\OrderOutput;
 
 class ProviderController extends Controller
 {
@@ -74,6 +76,20 @@ class ProviderController extends Controller
 
             return $this->successResponse($newresults);
 
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
+    public function getOfferDetail($order_id){
+        try {
+            $results_polygon = OrderLocation::where('order_id', $order_id)->get();
+            $results_output = OrderOutput::where('order_id', $order_id)->get();
+            return response()->json([
+                'status' => 200,
+                'polygon' => $results_polygon,
+                'output'   => $results_output,
+            ]);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage());
         }

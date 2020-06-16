@@ -21,9 +21,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('login-provider', 'V2\AuthController@loginProvider');
 
 
-          /* SERVICE PROVIDER V4   */
+          /* SERVICE PROVIDER V2   */
         $router->group(['prefix' => 'provider', 'middleware' => ['auth:api', 'droner_hiber']], function () use($router){
             $router->get('offer/{projecttype}', ['uses' => 'V2\ProviderController@getOffer']);
+            $router->get('offer-detail/{order_id}', ['uses' => 'V2\ProviderController@getOfferDetail']);
+            $router->post('bid-offer', ['uses' => 'V2\ProviderController@postBidOffer']);
         });
     });
 });
