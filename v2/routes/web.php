@@ -23,7 +23,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
           /* SERVICE PROVIDER V4   */
         $router->group(['prefix' => 'provider', 'middleware' => ['auth:api', 'droner_hiber']], function () use($router){
-            $router->get('offer/{provider_id}/{projecttype}', ['uses' => 'V2/ProviderControllerV4@offerShow']);
+            $router->get('offer/{projecttype}', ['uses' => 'V2\ProviderController@getOffer']);
         });
     });
 });
