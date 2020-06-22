@@ -27,7 +27,7 @@ class ClientController extends Controller
         $this->accessToken = Auth::user()->token();
     }
 
-    public function orderNew(){
+    public function getOrderNew(){
         try {
             $results = OrderStatus::with(['order', 'user'])->where('changedby_id', $this->accessToken->user_id)->whereIn('status_id', ['1'])->orderBy('id', 'desc')->get();
             return $this->successResponse($results);
@@ -36,7 +36,7 @@ class ClientController extends Controller
         }
     }
 
-    public function orderRun(){
+    public function getOrderRun(){
         try {
             $results = OrderStatus::with(['order', 'user'])->where('changedby_id', $this->accessToken->user_id)->whereIn('status_id', ['2'])->orderBy('id', 'desc')->get();
             return $this->successResponse($results);
@@ -120,4 +120,14 @@ class ClientController extends Controller
             return $this->errorResponse($e->getMessage());
         }
     }
+
+    public function getOrderHistory(){
+        try {
+            $results = OrderStatus::with('order', 'user')->where('changedby_id', $this->accessToken->user_id)->whereIn('status_id', ['3', '4'])->orderBy('updated_at', 'desc')->get();
+            return $this->successResponse($results);
+
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
+     }
 }
