@@ -68,7 +68,48 @@ class ClientController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage());
         }
-
    }
+
+   public function getOrderProposal($order_id, $filter){
+    try {
+        if($filter == '1'){
+            // Default Data Terakhir
+            $results = OrderProposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->orderBy('id', 'desc')->get();
+        }elseif($filter == '2'){
+            // Rating
+            /*  $results = UserFeedback::with(['user', 'proposal' => function ($query) use ($order_id) {
+                $query->where('order_id', $order_id);
+            }])->orderBy('total_rating', 'desc')->get(); */
+            $rest = OrderProposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->orderBy('id', 'desc')->get();
+
+            $rest = $rest->sortByDesc(function ($item, $key) {
+                return ($item['user_feedback']['total_rating']);
+            });
+
+            $results = $rest->values()->all();
+
+        }elseif($filter == '3'){
+            // Termurah
+            $results = OrderProposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->orderBy('offered_price', 'asc')->get();
+        }elseif($filter == '4'){
+            // Termahal
+            $results = OrderProposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->orderBy('offered_price', 'desc')->get();
+        }else{
+            // Anythings
+            $results = OrderProposal::with(['user', 'user_feedback'])
+            ->where('order_id', $order_id)->get();
+        }
+
+        return $this->successResponse($results);
+
+    } catch (\Exception $e) {
+        return $this->errorResponse($e->getMessage());
+    }
+
+}
 
 }
