@@ -49,6 +49,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'client', 'middleware' => ['auth:api', 'client_hiber']], function () use($router){
             $router->get('order-new', ['uses' => 'V2\ClientController@orderNew']);
+            $router->get('order-run', ['uses' => 'V2\ClientController@orderRun']);
         });
 
     });

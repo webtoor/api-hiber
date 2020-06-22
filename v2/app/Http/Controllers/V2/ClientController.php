@@ -35,4 +35,13 @@ class ClientController extends Controller
         }
     }
 
+    public function orderRun(){
+        try {
+            $results = OrderStatus::with(['order', 'user'])->where('changedby_id', $this->accessToken->user_id)->whereIn('status_id', ['2'])->orderBy('id', 'desc')->get();
+            return $this->successResponse($results);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
 }
