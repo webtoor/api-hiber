@@ -55,6 +55,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('order-proposal/{order_id}/{filter}', ['uses' => 'V2\ClientController@getOrderProposal']);
             $router->get('order-rating/{order_id}', ['uses' => 'V2\ClientController@getOrderRating']);
             $router->get('order-history', ['uses' => 'V2\ClientController@getOrderhistory']);
+            $router->get('profil-provider/{provider_id}', ['uses' => 'V2\ClientController@getProfilProvider']);
         });
 
     });

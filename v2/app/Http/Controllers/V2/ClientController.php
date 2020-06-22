@@ -130,4 +130,13 @@ class ClientController extends Controller
             return $this->errorResponse($e->getMessage());
         }
      }
+
+    public function getProfilProvider($provider_id){
+        try {
+            $results = User::find($provider_id);
+            return $this->successResponse($results);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
+    }
 }
