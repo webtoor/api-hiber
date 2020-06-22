@@ -104,12 +104,20 @@ class ClientController extends Controller
             ->where('order_id', $order_id)->get();
         }
 
-        return $this->successResponse($results);
+            return $this->successResponse($results);
 
-    } catch (\Exception $e) {
-        return $this->errorResponse($e->getMessage());
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
     }
 
-}
+    public function getOrderRating($order_id){
+        try {
+            $results = OrderStatus::with('user')->where('order_id', $order_id)->where('status_id', '3')->first();
+            return $this->successResponse($results);
 
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
+    }
 }
