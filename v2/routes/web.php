@@ -51,6 +51,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('order-new', ['uses' => 'V2\ClientController@orderNew']);
             $router->get('order-run', ['uses' => 'V2\ClientController@orderRun']);
             $router->get('history-provider/{provider_id}', ['uses' => 'V2\ClientController@historyProvider']);
+            $router->get('polygon/{order_id}', ['uses' => 'V2\ClientController@getPolygon']);
         });
 
     });
@@ -64,7 +65,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('order_berjalan/{user_id}', ['uses' => 'V1\ProjectController@berjalan_show']);
         $router->put('order_status/{order_id}', ['uses' => 'V1\ProjectController@updateStatus']);
         $router->get('history_provider/{provider_id}', ['uses' => 'V1\ProjectController@historyProvider']);
-        $router->get('polygon/{order_id}', ['uses' => 'V1\ProjectController@show\V1\Polygon']);
+        $router->get('polygon/{order_id}', ['uses' => 'V1\ProjectController@showPolygon']);
         $router->get('order_proposal/{order_id}/{filter}', ['uses' => 'V1\ProjectController@proposal']);
         $router->get('get_rating/{order_id}', ['uses' => 'V1\ProjectController@getrating']);
         $router->post('order_feedback/{order_id}', ['uses' => 'V1\ProjectController@feedback']);

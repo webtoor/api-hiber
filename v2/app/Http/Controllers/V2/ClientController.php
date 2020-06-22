@@ -54,4 +54,21 @@ class ClientController extends Controller
         }
     }
 
+    public function getPolygon($order_id){
+        try {
+            $result_polygon = OrderLocation::where('order_id', $order_id)->get();
+            $result_output = OrderOutput::where('order_id', $order_id)->get();
+
+                return response()->json([
+                    'status' => 200,
+                    'polygon' => $result_polygon,
+                    'output' => $result_output
+                ]);
+
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage());
+        }
+
+   }
+
 }
