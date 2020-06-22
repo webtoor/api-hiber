@@ -45,13 +45,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasOne('App\Models\UserRole', 'user_id');
     }
     public function order_status(){
-        return $this->hasOne('App\Order_status', 'doneby_id');
+        return $this->hasOne('App\Models\Order_status', 'doneby_id');
     }
     public function proposal(){
-        return $this->hasOne('App\Order_proposal', 'proposal_by');
+        return $this->hasOne('App\Models\Order_proposal', 'proposal_by');
     }
     public function user_feedback(){
-        return $this->hasOne('App\User_feedback', 'user_id');
+        return $this->hasOne('App\Models\User_feedback', 'user_id');
     }
     public function role_user(){
         return $this->hasOne('App\Models\UserRole', 'user_id')->where('rf_role_id' ,'2');

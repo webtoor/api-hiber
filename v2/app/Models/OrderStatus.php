@@ -19,7 +19,7 @@ class OrderStatus extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\User', 'provider_id', 'id');
+        return $this->belongsTo('App\Models\User', 'provider_id', 'id');
     }
      public function proposal_by(){
         return $this->belongsTo('App\Models\OrderProposal', 'provider_id', 'proposal_by');
