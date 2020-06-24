@@ -51,6 +51,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('order', ['uses' => 'V2\ClientController@createOrder']);
             $router->get('order-new', ['uses' => 'V2\ClientController@getOrderNew']);
             $router->get('order-run', ['uses' => 'V2\ClientController@getOrderRun']);
+            $router->put('order-status/{order_id}', ['uses' => 'V2\ClientController@updateOrderStatus']);
             $router->get('history-provider/{provider_id}', ['uses' => 'V2\ClientController@historyProvider']);
             $router->get('polygon/{order_id}', ['uses' => 'V2\ClientController@getPolygon']);
             $router->get('order-proposal/{order_id}/{filter}', ['uses' => 'V2\ClientController@getOrderProposal']);

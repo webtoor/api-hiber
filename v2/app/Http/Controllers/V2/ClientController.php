@@ -168,6 +168,70 @@ class ClientController extends Controller
 
    }
 
+   public function updateOrderStatus (Request $request, $order_id){
+        $status = $request->json('status');
+        $provider_id = $request->json('provider_id');
+        $results_token = DeviceToken::where('user_id', $provider_id)->OrderBy('id', 'desc')->first();
+        if($provider_id){
+            // GUNAKAN
+            if($status == "2"){
+                $result = OrderStatus::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+                $client = new \GuzzleHttp\Client();
+
+                        $url = 'https://fcm.googleapis.com/fcm/send';
+                        $headers = [
+                            'Content-Type' =>'application/json',
+                            'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+
+                        ];
+                        $notification = [
+                            "title" => "Proyek Berjalan",
+                            "body" => "Ada yang menggunakan jasa anda",
+                            "sound" => "default",
+                            "click_action" => "FCM_PLUGIN_ACTIVITY",
+                            "icon" =>"fcm_push_icon"
+                        ];
+
+                        $data = [
+                            "title" => "Proyek Berjalan",
+                            "body" => "Ada yang menggunakan Jasa anda",
+                            "action" => "bekerja",
+                            "forceStart" => "1"
+                        ];
+
+                    $response = $client->post('https://fcm.googleapis.com/fcm/send', [
+                        'headers' => ['Content-Type' => 'application/json',
+                        'Authorization' => 'key=AIzaSyBBM08AA_Gt0U0ov0pB0swrvfN9qiDKcqs'
+                    ],
+                        'body' => json_encode([
+                            'notification'=> $notification,
+                            'data' => $data,
+                            "to" => $results_token->token,
+                            "priority" => "high"
+                        ])
+                    ]);
+                    $result_subscribe =  $response->getBody();
+            }elseif($status == "3"){
+            // SELESAI
+                $result = OrderStatus::where('order_id',$order_id)->update(['status_id' => $status, 'provider_id' => $provider_id]);
+            }
+        }else{
+            // CANCEL
+            $result = OrderStatus::where('order_id',$order_id)->update(['status_id' => $status]);
+        }
+
+        if($result){
+            return response()->json([
+                "success" => true,
+            ]);
+        }else{
+            return response()->json([
+                "success" => false,
+            ]);
+        }
+
+}
+
    public function createFeedback(Request $request,$order_id){
         $writter = $request->json('writter');
         $for = $request->json('for');
