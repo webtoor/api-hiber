@@ -168,6 +168,52 @@ class ClientController extends Controller
 
    }
 
+   public function createFeedback(Request $request,$order_id){
+        $writter = $request->json('writter');
+        $for = $request->json('for');
+        $rating = $request->json('rating');
+        $comment = $request->json('comment');
+
+        // INSERT ORDER FEEDBACK
+        $results = OrderFeedback::create([
+            'writter' => $writter,
+            'for' => $for,
+            'order_id' => $order_id,
+            'rating' => $rating,
+            'comment' => $comment,
+        ]);
+        // TOTAL RATING PROVIDER ORDER_FEEDBACK
+        $total_rating = OrderFeedback::where('for', $for)->avg('rating');
+
+        // CHECK PROVIDER
+        $check_provider =  UserFeedback::where('user_id', $for)->first();
+
+        if($check_provider){
+            // JIKA ADA
+            $result_final = UserFeedback::where('user_id', $for)->update([
+                'total_rating' => $total_rating
+            ]);
+        }else{
+            // TIDAK ADA
+        $result_final = UserFeedback::create([
+                'user_id' => $for,
+                'total_rating' => $total_rating,
+            ]);
+        }
+
+        if($result_final){
+            return response()->json([
+                'success' => true,
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+            ]);
+        }
+    }
+
+
+
     public function historyProvider($provider_id){
         try {
             $results = OrderStatus::with('order', 'output', 'order_feedback')->where(['provider_id' => $provider_id, 'status_id' => '3'])->get();
