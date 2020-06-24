@@ -48,6 +48,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
 
         $router->group(['prefix' => 'client', 'middleware' => ['auth:api', 'client_hiber']], function () use($router){
+            $router->post('order', ['uses' => 'V2\ClientController@createOrder']);
             $router->get('order-new', ['uses' => 'V2\ClientController@getOrderNew']);
             $router->get('order-run', ['uses' => 'V2\ClientController@getOrderRun']);
             $router->get('history-provider/{provider_id}', ['uses' => 'V2\ClientController@historyProvider']);
