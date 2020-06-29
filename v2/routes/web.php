@@ -25,8 +25,6 @@ $router->get('check', ['uses' => 'V1\AuthController@check']);
 $router->get('export_latlng/{order_id}', ['uses' => 'V2\ProviderController@exportLatLong']);
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->post('login_provider', ['uses' => 'V1\AuthController@login_provider']);
-
 
     $router->group(['prefix' => 'v2'], function () use ($router) {
         $router->post('register', 'V2\AuthController@register');
