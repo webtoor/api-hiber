@@ -47,7 +47,7 @@ $app->singleton(
 );
 
 $app->configure('auth');
-
+$app->configure('cors');
 
 /*
 |--------------------------------------------------------------------------
@@ -61,7 +61,7 @@ $app->configure('auth');
 */
 
  $app->middleware([
-     App\Http\Middleware\ExampleMiddleware::class
+    Fruitcake\Cors\HandleCors::class,
  ]);
 
  $app->routeMiddleware([
@@ -93,6 +93,9 @@ $app->configure('auth');
  $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
  \Dusterio\LumenPassport\LumenPassport::routes($app->router);
 
+
+// CORS
+$app->register(Fruitcake\Cors\CorsServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
