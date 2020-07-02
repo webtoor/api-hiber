@@ -36,7 +36,7 @@ class ClientMiddleware
     public function handle($request, Closure $next, $guard = null)
     {
         //return $this->auth->user()->token();
-        if($this->auth->user()->role->rf_role_id !== 2){
+        if($this->auth->user()->role_user->rf_role_id !== 2){
             return response()->json([
                 'status' => 401,
                 'message' => 'Unauthorized'], 200);
