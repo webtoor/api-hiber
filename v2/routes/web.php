@@ -66,7 +66,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
      /* USER BEFORE UPGRADE  */
     $router->get('logout', ['uses' => 'AuthController@logout']);
     $router->group(['prefix' => 'user', 'middleware' => ['client_hiber']], function () use ($router) {
-        $router->post('order', ['uses' => 'OrderController@create']);
+        $router->post('order', ['uses' => 'V1\OrderController@create']);
         $router->get('order_baru/{user_id}', ['uses' => 'V1\ProjectController@baru_show']);
         $router->get('order_berjalan/{user_id}', ['uses' => 'V1\ProjectController@berjalan_show']);
         $router->put('order_status/{order_id}', ['uses' => 'V1\ProjectController@updateStatus']);
